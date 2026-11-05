@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Belajar Pseudocode</title>
+<style>
+:root{--bg:#eef3f1;--panel:#fff;--ink:#17302e;--mute:#5a706d;--line:#cbd9d5;--acc:#1f6f78;--acc-ink:#fff;--ok:#1f7a4a;--bad:#b4401b;--code:#f6faf8;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1e1d;--panel:#162928;--ink:#e3efec;--mute:#93aaa6;--line:#2b4543;--acc:#4fb3bd;--acc-ink:#0b1a19;--ok:#58c486;--bad:#f0825a;--code:#101f1e}}
+:root[data-theme="dark"]{--bg:#0f1e1d;--panel:#162928;--ink:#e3efec;--mute:#93aaa6;--line:#2b4543;--acc:#4fb3bd;--acc-ink:#0b1a19;--ok:#58c486;--bad:#f0825a;--code:#101f1e}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Trebuchet MS",Verdana,system-ui,sans-serif;
+background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:28px 28px;background-attachment:fixed}
+.mono,textarea,pre,code{font-family:ui-monospace,"Cascadia Code",Menlo,Consolas,monospace}
+header{padding:28px 20px 8px;max-width:1100px;margin:0 auto}
+h1{margin:0;font-size:clamp(1.7rem,4vw,2.4rem);letter-spacing:-.02em}
+header p{margin:6px 0 0;color:var(--mute);max-width:60ch}
+main{max-width:1100px;margin:0 auto;padding:16px 20px 40px;display:grid;grid-template-columns:300px 1fr;gap:20px}
+@media(max-width:820px){main{grid-template-columns:1fr}}
+section,aside{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px}
+h2{font-size:1.05rem;margin:0 0 10px}
+h3{font-size:.95rem;margin:14px 0 6px}
+label{display:block;font-size:.85rem;color:var(--mute);margin:10px 0 4px}
+input,textarea{width:100%;font-size:.95rem;color:var(--ink);background:var(--code);border:1px solid var(--line);border-radius:6px;padding:8px 10px}
+textarea{resize:vertical}
+input:focus-visible,textarea:focus-visible,button:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+button{font:inherit;font-size:.9rem;cursor:pointer;border:1px solid var(--acc);background:transparent;color:var(--acc);border-radius:6px;padding:7px 12px}
+button.main{background:var(--acc);color:var(--acc-ink)}
+button:hover{filter:brightness(1.08)}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+ul.soal{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+ul.soal li{display:flex;gap:6px}
+ul.soal button.pick{flex:1;text-align:left;color:var(--ink);border-color:var(--line);background:var(--code);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+ul.soal button.pick.on{border-color:var(--acc);box-shadow:inset 3px 0 0 var(--acc)}
+ul.soal button.del{border-color:var(--line);color:var(--mute);padding:7px 9px}
+.stack{display:grid;gap:20px;align-content:start}
+.soalbox{border-left:4px solid var(--acc);padding:4px 0 4px 12px;background:none}
+.soalbox h2{margin-bottom:4px}
+.soalbox p{margin:0;white-space:pre-wrap}
+textarea#kode{min-height:300px;line-height:1.5;tab-size:2;white-space:pre}
+.msg{margin:0;padding:0;list-style:none;display:grid;gap:5px;font-size:.92rem}
+.msg li{padding:6px 10px;border-radius:6px;border:1px solid var(--line)}
+.msg .e{border-color:var(--bad);color:var(--bad)}
+.msg .o{border-color:var(--ok);color:var(--ok)}
+pre{margin:0;background:var(--code);border:1px solid var(--line);border-radius:6px;padding:10px 12px;overflow-x:auto;font-size:.88rem;line-height:1.5}
+.hint{color:var(--mute);font-size:.85rem}
+details{margin-top:10px}
+summary{cursor:pointer;color:var(--acc)}
+.tools{float:right;margin:0;font-size:.8rem;padding:4px 9px}
+:root{--bg:#f4f5fb;--panel:#fff;--ink:#1c2033;--mute:#6a7088;--line:#e2e4ef;--acc:#5b5bd6;--acc-ink:#fff;--ok:#15803d;--bad:#d93a3a;--code:#f8f9fd;--kw:#7c3aed;--st:#0f766e;--nm:#b45309;--cm:#8a90a8;--sh:0 1px 2px rgba(28,32,51,.06),0 10px 28px rgba(28,32,51,.07)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0f1220;--panel:#171a2c;--ink:#e8eaf6;--mute:#9aa0bd;--line:#2a2e48;--acc:#8b8cf5;--acc-ink:#10122a;--ok:#4ade80;--bad:#ff7b7b;--code:#12152a;--kw:#c4a1ff;--st:#5eead4;--nm:#fbbf24;--cm:#7a8099;--sh:0 10px 28px rgba(0,0,0,.4)}}
+:root[data-theme=dark]{--bg:#0f1220;--panel:#171a2c;--ink:#e8eaf6;--mute:#9aa0bd;--line:#2a2e48;--acc:#8b8cf5;--acc-ink:#10122a;--ok:#4ade80;--bad:#ff7b7b;--code:#12152a;--kw:#c4a1ff;--st:#5eead4;--nm:#fbbf24;--cm:#7a8099;--sh:0 10px 28px rgba(0,0,0,.4)}
+body{font-family:Inter,'Segoe UI',system-ui,sans-serif;background:var(--bg);background-image:none}
+header{padding-top:34px}h1{font-weight:800}
+section,aside{border-radius:16px;box-shadow:var(--sh)}
+button{border-radius:10px;font-weight:600;padding:8px 14px}
+button.main{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+input,textarea{border-radius:10px}
+ul.soal button.pick{border-radius:10px;font-weight:500}
+.msg li{border-radius:10px}.msg li.e{cursor:pointer}
+.ed{position:relative;display:flex;height:340px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--code)}
+.ed:focus-within{border-color:var(--acc);box-shadow:0 0 0 3px color-mix(in srgb,var(--acc) 25%,transparent)}
+.gut{flex:0 0 46px;overflow:hidden;padding:12px 8px 60px 0;text-align:right;font:13px/21px ui-monospace,Menlo,Consolas,monospace;color:var(--mute);background:color-mix(in srgb,var(--line) 35%,var(--code));user-select:none}
+.gut div.er{color:var(--bad);font-weight:700}
+.wrap{position:relative;flex:1;min-width:0}
+#bk,#ed #kode{position:absolute;inset:0;margin:0;border:0;border-radius:0;font:14px/21px ui-monospace,Menlo,Consolas,monospace;white-space:pre;tab-size:2;letter-spacing:0}
+#bk{padding:12px 40px 60px 12px;overflow:hidden;pointer-events:none;color:var(--ink);background:transparent}
+#ed #kode{padding:12px;width:100%;height:100%;min-height:0;resize:none;overflow:auto;background:transparent;color:transparent;caret-color:var(--ink);outline:none;box-shadow:none}
+#kode::selection{background:color-mix(in srgb,var(--acc) 35%,transparent);color:transparent}
+.k{color:var(--kw);font-weight:600}.s{color:var(--st)}.n{color:var(--nm)}.c{color:var(--cm);font-style:italic}
+.sq{text-decoration:underline wavy var(--bad);text-decoration-thickness:1.5px;text-underline-offset:3px}
+.tip{position:fixed;z-index:20;max-width:320px;background:var(--ink);color:var(--bg);font-size:.82rem;padding:6px 10px;border-radius:8px;pointer-events:none;box-shadow:var(--sh)}
+.stat{margin-top:8px;font-size:.85rem;font-weight:600;min-height:1.2em}.stat.ok{color:var(--ok)}.stat.bad{color:var(--bad)}
+.tabs{max-width:1100px;margin:0 auto;padding:6px 20px 0;display:flex;gap:6px}
+.tab{background:transparent;border:1px solid var(--line);color:var(--mute)}
+.tab.on{background:var(--acc);border-color:var(--acc);color:var(--acc-ink)}
+main.solo{display:block}main[hidden]{display:none!important}
+.ctl{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-end}
+.ctl fieldset{border:0;padding:0;margin:0}.ctl legend{font-size:.8rem;color:var(--mute);margin-bottom:6px;padding:0}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;font-size:.88rem;cursor:pointer;margin:0 6px 6px 0;background:var(--code)}
+.chip input{width:auto;margin:0}.chip.off{opacity:.5;cursor:not-allowed}
+.chip:has(input:checked){border-color:var(--acc);background:color-mix(in srgb,var(--acc) 14%,var(--code))}
+.sc{margin-top:16px}.sc h3{font-size:1.25rem;margin:0 0 8px}.sc h4{margin:14px 0 0;font-size:.95rem}
+.tag{font-size:.72rem;font-weight:700;padding:2px 9px;border-radius:999px;margin-right:6px;background:color-mix(in srgb,var(--acc) 16%,transparent);color:var(--acc)}
+.cb{border:1px solid var(--line);border-radius:10px;padding:4px 14px;margin-top:10px;background:var(--code)}
+.sc-wrap{overflow-x:auto}table.ct{width:100%;border-collapse:collapse;margin-top:8px;font-size:.88rem}
+.ct th,.ct td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top;white-space:pre-wrap}
+.ct th{background:var(--code)}.ct td:not(:last-child){font-family:ui-monospace,Menlo,Consolas,monospace}
+td.ok{color:var(--ok);font-weight:700}td.bad{color:var(--bad);font-weight:700}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px}.fr textarea{font-size:.85rem}
+#uji h3{margin:16px 0 6px;font-size:1rem}
+.i{width:1.15em;height:1.15em;vertical-align:-.2em;flex:none}
+.tab{display:inline-flex;align-items:center;gap:6px}
+.tg{width:100%;display:flex;align-items:center;gap:8px;background:transparent;border:0;padding:6px 2px;color:var(--ink);font-size:1rem;text-align:left}
+.tg .chev{margin-left:auto;transition:transform .2s}.tg.open .chev{transform:rotate(180deg)}
+ul.soal{max-height:320px;overflow-y:auto;padding-right:2px}
+li.gh{font-size:.72rem;color:var(--mute);font-weight:700;text-transform:uppercase;letter-spacing:.05em;align-items:center;justify-content:space-between;margin-top:6px}
+.hgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px}
+.hc{display:flex;flex-direction:column;align-items:flex-start;gap:6px;text-align:left;padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--code);color:var(--ink);font-weight:400}
+.hc b{font-size:1rem}.hc .i{width:1.6em;height:1.6em;color:var(--acc)}.hc.off{opacity:.55}
+@media(min-width:821px){#v-edit.cl{grid-template-columns:64px 1fr}#v-edit.cl aside{padding:10px}#v-edit.cl #tgTxt,#v-edit.cl .chev,#v-edit.cl #listBody,#v-edit.cl #tgForm,#v-edit.cl #formBody{display:none}}
+@media(max-width:700px){.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;max-width:none;margin:0;padding:6px 8px calc(6px + env(safe-area-inset-bottom,0px));background:var(--panel);border-top:1px solid var(--line);justify-content:space-around;gap:2px}
+.tab{flex:1;flex-direction:column;border:0;font-size:.7rem;padding:6px 2px;gap:2px}.tab.on{background:transparent;color:var(--acc)}.tab .i{width:1.4em;height:1.4em}body{padding-bottom:76px}}
+</style>
+</head>
+<body>
+<header>
+<button class="tools" id="tema" type="button">Ganti tema</button>
+<h1>Belajar Pseudocode</h1>
+<p>Tulis algoritma dengan struktur baku: nama program, kamus, input, output, dan akhir program. Masukkan soalmu sendiri lalu latih di sini.</p>
+</header>
+<nav class="tabs"><button class="tab on" data-v="v-home" type="button"><span class="ic" data-ic="home"></span><span>Beranda</span></button><button class="tab" data-v="v-edit" type="button"><span class="ic" data-ic="code"></span><span>Editor</span></button><button class="tab" data-v="v-acak" type="button"><span class="ic" data-ic="shuffle"></span><span>Latihan Acak</span></button><button class="tab" data-v="v-guide" type="button"><span class="ic" data-ic="info"></span><span>Panduan</span></button><button class="tab" data-v="v-uts" type="button"><span class="ic" data-ic="clock"></span><span>Mode UTS</span></button></nav>
+<main id="v-edit" hidden>
+<aside>
+<button class="tg" id="tgList" type="button" aria-expanded="true"><span class="ic" data-ic="list"></span><b id="tgTxt">Daftar soal</b><span class="ic chev" data-ic="chev"></span></button>
+<div id="listBody"><ul class="soal" id="daftar"></ul></div>
+<button class="tg" id="tgForm" type="button" aria-expanded="false"><span class="ic" data-ic="plus"></span><b>Tambah soal dari kamu</b><span class="ic chev" data-ic="chev"></span></button>
+<div id="formBody" hidden>
+<label for="jd">Judul soal</label>
+<input id="jd" maxlength="80" placeholder="Contoh: Luas segitiga">
+<label for="isi">Isi soal</label>
+<textarea id="isi" rows="4" placeholder="Tulis soal lengkap di sini"></textarea>
+<label>Contoh masukan dan keluaran (dipakai untuk menguji jawaban)</label>
+<div id="fRows"></div>
+<div class="row"><button id="fAdd" type="button">+ Baris contoh</button></div>
+<div class="row"><button class="main" id="tambah" type="button">Simpan soal</button></div>
+<p class="hint" id="info"></p></div>
+</aside>
+
+<div class="stack">
+<section class="soalbox" id="soalbox"></section>
+
+<section>
+<h2>Editor pseudocode</h2>
+<div class="ed" id="ed"><div class="gut" id="gut" aria-hidden="true"></div><div class="wrap"><pre id="bk" aria-hidden="true"></pre><textarea id="kode" spellcheck="false" wrap="off" aria-label="Editor pseudocode"></textarea></div></div>
+<div class="stat" id="stat"></div><div class="tip" id="tip" hidden></div>
+<div class="row">
+<button class="main" id="cek" type="button">Periksa struktur</button>
+<button id="jalan" type="button">Jalankan</button>
+<button id="periksa" class="main" type="button">Uji jawaban</button><button id="templ" type="button">Isi template</button>
+<button id="contoh" type="button">Contoh jawaban</button>
+</div>
+<label for="masuk">Nilai input untuk dijalankan (pisahkan dengan spasi atau baris baru)</label>
+<textarea id="masuk" rows="2" placeholder="Contoh: 5 8"></textarea>
+<h3>Hasil</h3>
+<ul class="msg" id="hasil"><li>Tekan Periksa struktur untuk melihat hasilnya.</li></ul>
+<h3>Keluaran program</h3>
+<pre id="out">(belum dijalankan)</pre>
+<div id="uji"></div>
+</section>
+
+<section>
+<h2>Panduan struktur</h2>
+<pre>PROGRAM NamaProject
+KAMUS
+  a, b : integer
+  hasil : integer
+ALGORITMA
+  input(a, b)
+  hasil = a + b
+  output("Hasil =", hasil)
+ENDPROGRAM</pre>
+<p><b>PROGRAM</b> memberi nama project. <b>KAMUS</b> berisi deklarasi variabel dengan format <code>nama : tipe</code>; tipe yang dikenal: integer, real, string, boolean, char. <b>ALGORITMA</b> berisi <code>input(...)</code>, <code>output(...)</code>, dan penugasan memakai <code>=</code> (tanda <code>&lt;-</code> juga diterima). Perbandingan memakai <code>==</code>. Argumen <code>output</code> dipisah satu spasi secara otomatis, seperti <code>Println</code> di Go. Perulangan dan percabangan juga didukung: <code>for i &lt;- 1 to k do</code> ... <code>endfor</code>, <code>while kondisi do</code> ... <code>endwhile</code>, dan <code>if kondisi then</code> ... <code>else</code> ... <code>endif</code>. Program diakhiri <b>ENDPROGRAM</b>. Komentar ditulis dengan <code>//</code> atau <code>{...}</code>.</p>
+</section>
+</div>
+</main>
+
+<main id="v-home" class="solo">
+<section><h2>Selamat datang</h2><p class="hint">Berlatih menulis pseudocode dengan format kuliah Algoritma dan Pemrograman 1. Pilih menu di bawah ini.</p>
+<div class="hgrid">
+<button class="hc" data-go="v-edit" type="button"><span class="ic" data-ic="code"></span><b>Editor</b><span>Tulis, periksa, jalankan, dan uji kodemu.</span></button>
+<button class="hc" data-go="v-acak" type="button"><span class="ic" data-ic="shuffle"></span><b>Latihan Acak</b><span>Soal baru setiap kali, per bab dan tingkat.</span></button>
+<button class="hc" data-go="v-guide" type="button"><span class="ic" data-ic="info"></span><b>Panduan</b><span>Format penulisan pseudocode.</span></button>
+<button class="hc" data-go="v-uts" type="button"><span class="ic" data-ic="clock"></span><b>Mode UTS</b><span>Simulasi ujian dengan timer, penyimpanan otomatis, dan penanda aktivitas.</span></button>
+</div></section></main>
+<main id="v-acak" class="solo" hidden>
+<section><h2>Latihan Soal Acak</h2><div class="ctl">
+<fieldset><legend>Bab</legend><div id="cBab"></div></fieldset>
+<fieldset><legend>Tingkat kesulitan</legend><div id="cLv"></div></fieldset>
+<fieldset><legend>Jumlah soal</legend><select id="cN"><option>1</option><option selected>3</option><option>5</option></select></fieldset>
+<button class="main" id="cGo" type="button">Buat soal</button></div>
+<p class="hint">Contoh keluaran dihitung otomatis oleh mesin pseudocode di website ini dari program kunci.</p></section>
+<div id="cOut"></div></main>
+
+<main id="v-uts" class="solo" hidden>
+<section>
+ <div class="row" style="justify-content:space-between;align-items:center">
+  <div><h2 style="margin-bottom:4px">Mode UTS</h2><p class="hint">Simulasi ujian dengan timer dan penyimpanan otomatis.</p></div><span class="tag">Simulasi</span>
+ </div>
+ <div id="utsSetup">
+  <h3>Persiapan ujian</h3>
+  <label for="utsTitle">Nama ujian</label><input id="utsTitle" maxlength="80" value="UTS Algoritma dan Pemrograman">
+  <div class="ctl" style="margin-top:12px">
+   <fieldset><legend>Durasi</legend><select id="utsDuration"><option value="0">Tanpa timer</option><option value="30">30 menit</option><option value="60" selected>60 menit</option><option value="90">90 menit</option><option value="120">120 menit</option></select></fieldset>
+   <fieldset><legend>Bentuk ujian</legend><select id="utsType"><option value="mixed" selected>Campuran (PG + Coding)</option><option value="pg">Pilihan ganda saja</option><option value="coding">Coding saja</option></select></fieldset>
+   <fieldset><legend>Tingkat kesulitan</legend><select id="utsLevel"><option value="all" selected>Semua level</option><option value="Mudah">Mudah</option><option value="Sedang">Sedang</option><option value="Sulit">Sulit</option></select></fieldset>
+   <fieldset><legend>Jumlah soal</legend><select id="utsCount"><option value="5">5 soal</option><option value="10" selected>10 soal</option><option value="15">15 soal</option></select></fieldset>
+   <fieldset><legend>Validasi aktivitas</legend><select id="utsValidation"><option value="log">Catat saja</option><option value="warn" selected>Peringatan maksimal 3 kali</option><option value="submit">Kumpulkan setelah 3 kali</option></select></fieldset>
+  </div>
+  <label class="chip" style="margin-top:12px"><input id="utsShuffle" type="checkbox" checked> Acak urutan soal</label>
+  <div class="sc" style="margin-top:12px"><b>Aturan simulasi</b><ul>
+   <li>Jawaban disimpan otomatis di browser/perangkat ini.</li><li>Timer memakai waktu akhir, jadi tetap berjalan saat tab ditinggalkan.</li>
+   <li>Perpindahan tab atau halaman dapat dicatat jika browser memberi sinyal.</li>
+   <li>Validasi browser bukan pengawasan penuh dan tidak menjamin semua kecurangan terdeteksi.</li>
+  </ul></div>
+  <div class="row"><button class="main" id="utsStart" type="button">Mulai ujian</button><button id="utsResume" type="button" hidden>Lanjutkan sesi</button><button id="utsClear" type="button">Hapus sesi tersimpan</button></div>
+  <p class="hint" id="utsSetupMsg" aria-live="polite"></p>
+ </div>
+ <div id="utsExam" hidden>
+  <div class="row" style="justify-content:space-between;align-items:center">
+   <div><b id="utsExamTitle">UTS</b><div class="hint" id="utsProgress"></div></div>
+   <div style="text-align:right"><div class="hint">Sisa waktu</div><strong id="utsClock" style="font-size:1.5rem;font-variant-numeric:tabular-nums">--:--</strong></div>
+  </div>
+  <div style="height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin:12px 0"><div id="utsBar" style="height:100%;width:0;background:var(--acc)"></div></div>
+  <div class="sc" id="utsQuestion"></div>
+  <div id="utsNumbers" class="row" style="gap:6px;margin:12px 0;flex-wrap:wrap"></div>
+  <div class="row" style="justify-content:space-between"><button id="utsPrev" type="button">Sebelumnya</button><button id="utsNext" type="button">Berikutnya</button></div>
+  <p class="hint" id="utsAutosave" aria-live="polite">Jawaban tersimpan otomatis.</p>
+  <div class="sc" style="margin-top:12px"><b>Catatan aktivitas</b><div id="utsWarnings" class="hint">Belum ada aktivitas tercatat.</div></div>
+  <div class="row" style="margin-top:14px"><button class="main" id="utsSubmit" type="button">Kumpulkan ujian</button></div>
+ </div>
+ <div id="utsResult" hidden></div>
+</section>
+<section>
+ <h3>Bank soal pilihan ganda</h3><p class="hint">Soal PG dan coding bawaan tersedia di Mode UTS. Soal coding dari PDF disajikan sebagai latihan menulis pseudocode dengan rubrik pemeriksaan.</p>
+ <div class="sc">
+  <label for="uqText">Pertanyaan</label><textarea id="uqText" rows="3" maxlength="1200" placeholder="Tulis pertanyaan..."></textarea>
+  <div class="fr"><input id="uqA" maxlength="300" placeholder="Pilihan A"><input id="uqB" maxlength="300" placeholder="Pilihan B"></div>
+  <div class="fr"><input id="uqC" maxlength="300" placeholder="Pilihan C"><input id="uqD" maxlength="300" placeholder="Pilihan D"></div>
+  <label for="uqKey">Kunci jawaban</label><select id="uqKey"><option value="0">A</option><option value="1">B</option><option value="2">C</option><option value="3">D</option></select>
+  <label for="uqExplain">Pembahasan (opsional)</label><textarea id="uqExplain" rows="2" maxlength="1000" placeholder="Pembahasan ditampilkan setelah ujian selesai."></textarea>
+  <div class="row"><button class="main" id="uqSave" type="button">Simpan soal</button><button id="uqExport" type="button">Ekspor bank soal</button><button id="uqImport" type="button">Impor JSON</button><input id="uqFile" type="file" accept="application/json,.json" hidden></div>
+  <p id="uqMsg" class="hint" aria-live="polite"></p><div id="uqList" class="hint"></div>
+ </div>
+</section>
+</main>
+
+<script>
+(function(){
+var BAWAAN=[
+{id:'b1',judul:'Penjumlahan dua bilangan',isi:'Buat program yang membaca dua bilangan bulat, lalu menampilkan hasil penjumlahannya.',kunci:'PROGRAM Penjumlahan\nKAMUS\n  a, b : integer\n  hasil : integer\nALGORITMA\n  input(a, b)\n  hasil = a + b\n  output("Hasil =", hasil)\nENDPROGRAM',masuk:'5 8'},
+{id:'b2',judul:'Luas persegi panjang',isi:'Buat program yang membaca panjang dan lebar, lalu menampilkan luas persegi panjang.',kunci:'PROGRAM LuasPersegiPanjang\nKAMUS\n  panjang, lebar : real\n  luas : real\nALGORITMA\n  input(panjang, lebar)\n  luas = panjang * lebar\n  output("Luas =", luas)\nENDPROGRAM',masuk:'6 4'},
+{id:'b3',judul:'Celsius ke Fahrenheit',isi:'Buat program yang membaca suhu dalam Celsius lalu mengubahnya ke Fahrenheit (F = C * 9 / 5 + 32).',kunci:'PROGRAM KonversiSuhu\nKAMUS\n  c : real\n  f : real\nALGORITMA\n  input(c)\n  f = c * 9 / 5 + 32\n  output(f)\nENDPROGRAM',masuk:'100'}
+];
+var TIPE=['integer','real','string','boolean','char'];
+var KATA=['mod','div','and','or','not','true','false','len'];
+var $=function(i){return document.getElementById(i)};
+var kustom=[],aktif=BAWAAN[0].id,draf={};
+
+function muat(){try{kustom=JSON.parse(localStorage.getItem('pc_soal')||'[]')||[];draf=JSON.parse(localStorage.getItem('pc_draf')||'{}')||{}}catch(e){kustom=[];draf={}}}
+function simpan(){try{localStorage.setItem('pc_soal',JSON.stringify(kustom));localStorage.setItem('pc_draf',JSON.stringify(draf))}catch(e){}}
+function semua(){return BAWAAN.concat(kustom)}
+function cari(id){return semua().filter(function(s){return s.id===id})[0]||BAWAAN[0]}
+
+function gambarDaftar(){
+ var ul=$('daftar');ul.innerHTML='';
+ semua().forEach(function(s){
+  var li=document.createElement('li');
+  var b=document.createElement('button');b.type='button';b.className='pick'+(s.id===aktif?' on':'');b.textContent=s.judul;
+  b.onclick=function(){pilih(s.id)};li.appendChild(b);
+  if(s.id.charAt(0)==='u'){var d=document.createElement('button');d.type='button';d.className='del';d.textContent='Hapus';d.setAttribute('aria-label','Hapus soal '+s.judul);
+   d.onclick=function(){kustom=kustom.filter(function(k){return k.id!==s.id});delete draf[s.id];simpan();if(aktif===s.id)aktif=BAWAAN[0].id;pilih(aktif)};li.appendChild(d)}
+  ul.appendChild(li)});
+}
+function pilih(id){
+ simpanDraf();aktif=id;var s=cari(id);
+ var box=$('soalbox');box.innerHTML='';
+ var h=document.createElement('h2');h.textContent=s.judul;var p=document.createElement('p');p.textContent=s.isi;
+ box.appendChild(h);box.appendChild(p);
+ $('kode').value=draf[id]||'';$('masuk').value=s.masuk||'';
+ $('hasil').innerHTML='<li>Tekan Periksa struktur untuk melihat hasilnya.</li>';$('out').textContent='(belum dijalankan)';
+ gambarDaftar();
+}
+function simpanDraf(){draf[aktif]=$('kode').value;simpan()}
+
+var TEMPLATE='PROGRAM NamaProject\nKAMUS\n  { deklarasi variabel di sini }\n  x : integer\nALGORITMA\n  input(x)\n  output(x)\nENDPROGRAM';
+
+function bersih(l){
+ var s='',q=false,i,c;
+ for(i=0;i<l.length;i++){c=l[i];if(c==='"')q=!q;
+  if(!q&&c==='/'&&l[i+1]==='/')break;
+  if(!q&&c==='{'){var j=l.indexOf('}',i);i=j<0?l.length:j;continue}
+  s+=c}
+ return s.trim();
+}
+function pecahArg(t){var a=[],cur='',q=false,d=0,i,c;
+ for(i=0;i<t.length;i++){c=t[i];if(c==='"')q=!q;
+  if(!q){if(c==='(')d++;if(c===')')d--;if(c===','&&d===0){a.push(cur.trim());cur='';continue}}
+  cur+=c}
+ if(cur.trim()!==''||a.length)a.push(cur.trim());return a}
+function idDalam(e){return (e.replace(/"[^"]*"|'[^']*'/g,' ').match(/[A-Za-z_]\w*/g)||[])}
+
+function analisis(){
+ var err=[],info={nama:'',vars:{},stmts:[]};
+ var raw=$('kode').value.split('\n'),L=[];
+ raw.forEach(function(t,i){var b=bersih(t);if(b)L.push({n:i+1,t:b})});
+ if(!L.length){return{err:[{n:0,m:'Editor masih kosong.'}],info:info}}
+ var m=/^program\s+([A-Za-z_]\w*)$/i.exec(L[0].t);
+ if(!m)err.push({n:L[0].n,m:'Baris pertama harus berbentuk PROGRAM NamaProject (tanpa spasi pada nama).'});else info.nama=m[1];
+ var ik=-1,ia=-1,ie=-1;
+ L.forEach(function(x,i){var u=x.t.toUpperCase();if(u==='KAMUS'&&ik<0)ik=i;else if(u==='ALGORITMA'&&ia<0)ia=i;else if((u==='ENDPROGRAM'||u==='END PROGRAM')&&ie<0)ie=i});
+ if(ik<0)err.push({n:0,m:'Bagian KAMUS belum ada.'});
+ if(ia<0)err.push({n:0,m:'Bagian ALGORITMA belum ada.'});
+ if(ie<0)err.push({n:0,m:'ENDPROGRAM belum ada di akhir program.'});
+ if(ik>=0&&ia>=0&&ik>ia)err.push({n:L[ik].n,m:'KAMUS harus ditulis sebelum ALGORITMA.'});
+ if(ie>=0&&ia>=0&&ie<ia)err.push({n:L[ie].n,m:'ENDPROGRAM harus berada setelah ALGORITMA.'});
+ if(ie>=0&&ie!==L.length-1)err.push({n:L[ie+1].n,m:'Ada baris setelah ENDPROGRAM.'});
+ if(ik>=0){var end=ia>ik?ia:(ie>ik?ie:L.length);
+  for(var i=ik+1;i<end;i++){var x=L[i],d,cm=/^constant\s+([A-Za-z_]\w*)\s*:\s*([A-Za-z]+)\s*=\s*(.+)$/i.exec(x.t);
+   if(cm){if(info.vars[cm[1]])err.push({n:x.n,m:'Variabel '+cm[1]+' dideklarasikan dua kali.'});else{info.vars[cm[1]]=cm[2].toLowerCase();(info.konst=info.konst||{})[cm[1]]=cm[3]}continue}
+   d=/^([A-Za-z_]\w*(?:\s*,\s*[A-Za-z_]\w*)*)\s*:\s*([A-Za-z]+)$/.exec(x.t);
+   if(!d){err.push({n:x.n,m:'Deklarasi tidak sesuai format "nama1, nama2 : tipe": '+x.t});continue}
+   if(TIPE.indexOf(d[2].toLowerCase())<0)err.push({n:x.n,m:'Tipe "'+d[2]+'" tidak dikenal. Pilih: '+TIPE.join(', ')+'.'});
+   d[1].split(/\s*,\s*/).forEach(function(v){if(info.vars[v])err.push({n:x.n,m:'Variabel '+v+' dideklarasikan dua kali.'});else info.vars[v]=d[2].toLowerCase()})}}
+ var tipeOk=function(e,n){idDalam(e).forEach(function(v){if(KATA.indexOf(v.toLowerCase())<0&&!info.vars[v])err.push({n:n,m:'Variabel '+v+' dipakai tetapi belum ada di KAMUS.'})})};
+ if(ia>=0){var e2=ie>ia?ie:L.length,adaIn=false,adaOut=false,stk=[],tutup=function(k,n){if(!stk.length||stk[stk.length-1].k!==k)err.push({n:n,m:'Penutup untuk '+k+' tidak punya pasangan yang cocok.'});else stk.pop()};
+  for(var j=ia+1;j<e2;j++){var y=L[j],t=y.t,mm;
+   if((mm=/^input\s*\((.*)\)$/i.exec(t))){adaIn=true;var as=pecahArg(mm[1]);
+    if(!as.length)err.push({n:y.n,m:'input() harus berisi nama variabel.'});
+    as.forEach(function(v){if(!/^[A-Za-z_]\w*$/.test(v))err.push({n:y.n,m:'Isi input() harus nama variabel, bukan: '+v});else if(!info.vars[v])err.push({n:y.n,m:'Variabel '+v+' dipakai tetapi belum ada di KAMUS.'})});
+    info.stmts.push({k:'in',a:as,n:y.n})}
+   else if((mm=/^output\s*\((.*)\)$/i.exec(t))){adaOut=true;var bs=pecahArg(mm[1]);
+    if(!bs.length)err.push({n:y.n,m:'output() tidak boleh kosong.'});
+    bs.forEach(function(e){tipeOk(e,y.n)});info.stmts.push({k:'out',a:bs,n:y.n})}
+   else if((mm=/^([A-Za-z_]\w*)\s*(?:<-|←|=(?!=))\s*(.+)$/.exec(t))){
+    if(!info.vars[mm[1]])err.push({n:y.n,m:'Variabel '+mm[1]+' dipakai tetapi belum ada di KAMUS.'});
+    tipeOk(mm[2],y.n);info.stmts.push({k:'as',v:mm[1],e:mm[2],n:y.n})}
+   else if((mm=/^for\s+([A-Za-z_]\w*)\s*(?:<-|←|=)\s*(.+?)\s+(to|downto)\s+(.+?)\s+do\s*:?$/i.exec(t))){
+    if(!info.vars[mm[1]])err.push({n:y.n,m:'Variabel '+mm[1]+' dipakai tetapi belum ada di KAMUS.'});
+    tipeOk(mm[2],y.n);tipeOk(mm[4],y.n);stk.push({k:'for'});info.stmts.push({k:'for',v:mm[1],a:mm[2],b:mm[4],d:mm[3].toLowerCase(),n:y.n})}
+   else if(/^(endfor|end\s+for)$/i.test(t)){tutup('for',y.n);info.stmts.push({k:'endfor',n:y.n})}
+   else if((mm=/^while\s+(.+?)\s+do\s*:?$/i.exec(t))){tipeOk(mm[1],y.n);stk.push({k:'while'});info.stmts.push({k:'while',e:mm[1],n:y.n})}
+   else if(/^(endwhile|end\s+while)$/i.test(t)){tutup('while',y.n);info.stmts.push({k:'endwhile',n:y.n})}
+   else if((mm=/^if\s+(.+?)\s+then\s*:?$/i.exec(t))){tipeOk(mm[1],y.n);stk.push({k:'if'});info.stmts.push({k:'if',e:mm[1],n:y.n})}
+   else if(/^else\s*:?$/i.test(t)){if(!stk.length||stk[stk.length-1].k!=='if')err.push({n:y.n,m:'else tidak punya if pasangannya.'});info.stmts.push({k:'else',n:y.n})}
+   else if(/^(endif|end\s+if)$/i.test(t)){tutup('if',y.n);info.stmts.push({k:'endif',n:y.n})}
+   else err.push({n:y.n,m:'Perintah tidak dikenali: '+t+' (gunakan input, output, penugasan dengan = atau <-, for, while, atau if).'})}
+  if(stk.length)err.push({n:0,m:'Ada blok '+stk[stk.length-1].k+' yang belum ditutup (endfor, endwhile, atau endif).'});
+  if(!adaIn)err.push({n:0,m:'Belum ada perintah input(...).'});
+  if(!adaOut)err.push({n:0,m:'Belum ada perintah output(...).'})}
+ return{err:err,info:info};
+}
+function tampil(r){
+ var ul=$('hasil');ul.innerHTML='';
+ if(!r.err.length){var li=document.createElement('li');li.className='o';li.textContent='Struktur benar. Program '+r.info.nama+' siap dijalankan.';ul.appendChild(li);return}
+ r.err.forEach(function(e){var li=document.createElement('li');li.className='e';li.textContent=(e.n?'Baris '+e.n+': ':'')+e.m;ul.appendChild(li)});
+}
+function hitung(e,v){
+ var s=e.split(/("[^"]*")/).map(function(p){if(p.charAt(0)==='"')return p;
+  p=p.replace(/(\w+|\([^()]*\))\s+div\s+(\w+|\([^()]*\))/gi,'Math.trunc(($1)/($2))').replace(/(\w+(?:\.\w+)?|\([^()]*\))\s*\^\s*(-?\w+(?:\.\w+)?|\([^()]*\))/g,'Math.pow($1,$2)').replace(/\bmod\b/gi,'%').replace(/<>/g,'!=').replace(/([^<>!=])=(?!=)/g,'$1==').replace(/\band\b/gi,'&&').replace(/\bor\b/gi,'||').replace(/\bnot\b/gi,'!');return p}).join('');
+ if(/[^\w\s+\-*\/%().,<>=!&|"]/.test(s.replace(/"[^"]*"|'[^']*'/g,'')))throw new Error('Ekspresi tidak valid: '+e);
+ try{return new Function('v','len','with(v){return ('+s+')}')(v,function(q){return String(q).length})}catch(x){if(x instanceof ReferenceError){var nm=(x.message.match(/^(\w+)/)||[])[1];throw new Error('variabel '+nm+' belum diberi nilai sebelum dipakai. Berikan nilainya lewat input() atau penugasan <- terlebih dahulu.')}throw x}
+}
+function pasang(S){var m={},stk=[];S.forEach(function(s,i){
+ if(s.k==='if'){m[i]={};stk.push(i)}
+ else if(s.k==='for'||s.k==='while')stk.push(i);
+ else if(s.k==='else')m[stk[stk.length-1]].e=i;
+ else if(s.k==='endif'){var q=stk.pop();m[q].f=i;if(m[q].e!==undefined)m[m[q].e]=i}
+ else if(s.k==='endfor'||s.k==='endwhile'){var o=stk.pop();m[o]=i;m[i]=o}});return m}
+function jalankan(){
+ var r=analisis();tampil(r);if(r.err.length){$('out').textContent='Perbaiki dulu kesalahan di atas.';return}
+ var tok=$('masuk').value.trim().split(/\s+/).filter(Boolean),pos=0,v={},out=[];
+ var S=r.info.stmts,pc=0,steps=0,mt=pasang(S),st={};
+ try{Object.keys(r.info.konst||{}).forEach(function(k){v[k]=hitung(r.info.konst[k],v)})}catch(e){}
+ try{while(pc<S.length){var s=S[pc];if(++steps>20000)throw new Error('Program berjalan terlalu lama, kemungkinan perulangan tidak pernah berhenti.');pc++;
+  if(s.k==='in')s.a.forEach(function(nm){if(pos>=tok.length)throw new Error('Nilai input kurang (baris '+s.n+'). Isi kolom nilai input.');
+   var t=r.info.vars[nm],x=tok[pos++];v[nm]=t==='integer'?parseInt(x,10):t==='real'?parseFloat(x):t==='boolean'?(x==='true'):x;
+   if((t==='integer'||t==='real')&&isNaN(v[nm]))throw new Error('Nilai "'+x+'" bukan angka untuk variabel '+nm+'.')});
+  else if(s.k==='as'){v[s.v]=hitung(s.e,v)}
+  else if(s.k==='out'){out.push(s.a.map(function(e){return fmt(hitung(e,v))}).join(' '))}
+  else{var i=pc-1;
+   if(s.k==='for'){if(!st[i]){v[s.v]=hitung(s.a,v);st[i]={e:hitung(s.b,v)}}
+    var ok=s.d==='to'?v[s.v]<=st[i].e:v[s.v]>=st[i].e;if(!ok){delete st[i];pc=mt[i]+1}}
+   else if(s.k==='endfor'){var f=mt[i],fs=S[f];v[fs.v]+=fs.d==='to'?1:-1;pc=f}
+   else if(s.k==='while'){if(!hitung(s.e,v))pc=mt[i]+1}
+   else if(s.k==='endwhile'){pc=mt[i]}
+   else if(s.k==='if'){if(!hitung(s.e,v))pc=(mt[i].e!==undefined?mt[i].e:mt[i].f)+1}
+   else if(s.k==='else'){pc=mt[i]+1}}}
+  $('out').textContent=out.join('\n')||'(tidak ada keluaran)'}
+ catch(e){$('out').textContent='Galat saat dijalankan: '+e.message}
+}
+
+$('cek').onclick=function(){tampil(analisis())};
+$('jalan').onclick=jalankan;
+$('templ').onclick=function(){$('kode').value=TEMPLATE;simpanDraf()};
+$('contoh').onclick=function(){var s=cari(aktif);
+ if(s.kunci){if(!$('kode').value.trim()||confirm('Ganti isi editor dengan contoh jawaban?')){$('kode').value=s.kunci;simpanDraf()}}
+ else $('info').textContent='Soal buatanmu belum punya contoh jawaban.'};
+$('kode').addEventListener('input',function(){draf[aktif]=this.value;simpan()});
+$('kode').addEventListener('keydown',function(e){if(e.key==='Tab'){e.preventDefault();var a=this.selectionStart;this.value=this.value.slice(0,a)+'  '+this.value.slice(this.selectionEnd);this.selectionStart=this.selectionEnd=a+2}});
+$('tambah').onclick=function(){
+ var j=$('jd').value.trim(),t=$('isi').value.trim();
+ if(!j||!t){$('info').textContent='Judul dan isi soal harus diisi.';return}
+ var id='u'+Date.now();kustom.push({id:id,judul:j,isi:t});simpan();
+ $('jd').value='';$('isi').value='';$('info').textContent='Soal tersimpan di browser ini.';pilih(id);
+};
+$('tema').onclick=function(){var r=document.documentElement,dark=r.getAttribute('data-theme')==='dark'||(!r.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme:dark)').matches);r.setAttribute('data-theme',dark?'light':'dark')};
+
+/* editor modern: warna, garis merah, nomor baris, tooltip */
+var TK=/(\/\/.*$|\{[^}]*\})|("[^"]*"|'[^']*')|\b(program|kamus|algoritma|endprogram|input|output|for|to|downto|do|endfor|while|endwhile|if|then|else|endif|constant|integer|real|string|boolean|char|mod|div|and|or|not|true|false|len)\b|\b(\d+(?:\.\d+)?)\b|\b([A-Za-z_]\w*)\b/gi;
+var errs=[],ta=$('kode'),bk=$('bk'),gut=$('gut'),tip=$('tip'),ct;
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+function hl(t,bad){var o='',last=0,m,h,c;TK.lastIndex=0;
+ while((m=TK.exec(t))){o+=esc(t.slice(last,m.index));c=m[1]?'c':m[2]?'s':m[3]?'k':m[4]?'n':'';h=esc(m[0]);
+  if(c)h='<span class="'+c+'">'+h+'</span>';else if(m[5]&&bad&&bad[m[0]])h='<span class="sq">'+h+'</span>';
+  o+=h;last=TK.lastIndex}
+ return o+esc(t.slice(last))}
+function eline(){var m={};errs.forEach(function(e){if(e.n)(m[e.n]=m[e.n]||[]).push(e.m)});return m}
+function sync(){bk.scrollTop=ta.scrollTop;bk.scrollLeft=ta.scrollLeft;gut.scrollTop=ta.scrollTop}
+function render(){var em=eline(),h='',g='';
+ ta.value.split('\n').forEach(function(t,i){var n=i+1,bad=null,whole=false,x;
+  (em[n]||[]).forEach(function(msg){var w=/^Variabel (\w+) dipakai/.exec(msg);if(w){bad=bad||{};bad[w[1]]=1}else whole=true});
+  x=hl(t,bad);if(whole&&t.trim())x='<span class="sq">'+x+'</span>';
+  h+=x+'\n';g+='<div'+(em[n]?' class="er"':'')+'>'+n+'</div>'});
+ bk.innerHTML=h;gut.innerHTML=g;sync()}
+function refresh(){var st=$('stat');
+ if(!ta.value.trim()){errs=[];render();st.className='stat';st.textContent='';return}
+ var r=analisis();errs=r.err;tampil(r);render();
+ st.className='stat '+(errs.length?'bad':'ok');st.textContent=errs.length?'\u2715 '+errs.length+' masalah ditemukan':'\u2713 Tidak ada masalah'}
+function ed(){render();clearTimeout(ct);ct=setTimeout(refresh,350)}
+var _t=tampil;tampil=function(r){_t(r);Array.prototype.forEach.call($('hasil').children,function(li,i){var e=r.err[i];
+ if(e&&e.n){li.title='Klik untuk ke baris '+e.n;li.onclick=function(){var p=ta.value.split('\n').slice(0,e.n-1).join('\n').length+(e.n>1?1:0);ta.focus();ta.setSelectionRange(p,p);ta.scrollTop=Math.max(0,(e.n-3)*21)}}})};
+var _p=pilih;pilih=function(id){_p(id);tabel(cari(id));ringkas();ed()};
+var _s=simpanDraf;simpanDraf=function(){_s();ed()};
+ta.addEventListener('input',ed);ta.addEventListener('scroll',sync);
+ta.addEventListener('keydown',function(e){if(e.key==='Tab')setTimeout(ed,0)});
+ta.addEventListener('mousemove',function(e){var rc=ta.getBoundingClientRect(),n=Math.floor((e.clientY-rc.top-12+ta.scrollTop)/21)+1,m=eline()[n];
+ if(m){tip.textContent=m.join(' \u2022 ');tip.hidden=false;tip.style.left=Math.max(8,Math.min(e.clientX+12,innerWidth-330))+'px';tip.style.top=(e.clientY+18)+'px'}else tip.hidden=true});
+ta.addEventListener('mouseleave',function(){tip.hidden=true});
+/* ===== LATIHAN ACAK ===== */
+var IC={home:'<path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/>',code:'<path d="M8 8l-5 4 5 4M16 8l5 4-5 4M14 5l-4 14"/>',shuffle:'<path d="M3 7h4l10 10h4M3 17h4l3-3M14 10l3-3h4M18 4l3 3-3 3M18 14l3 3-3 3"/>',info:'<circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/>',clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',chev:'<path d="M6 9l6 6 6-6"/>',trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',plus:'<path d="M12 5v14M5 12h14"/>',lock:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/>',list:'<path d="M4 6h16M4 12h16M4 18h10"/>',play:'<path d="M7 4l13 8-13 8z"/>',check:'<path d="M5 12l5 5 9-10"/>',moon:'<path d="M20 14A8 8 0 019.5 4a8 8 0 1010.5 10z"/>'};
+function ic(n){return '<svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+IC[n]+'</svg>'}
+var R=function(a,b){return a+Math.floor(Math.random()*(b-a+1))};
+var K=function(){return Array.prototype.join.call(arguments,'\n')};
+var LV=['','Mudah','Sedang','Sulit'];
+var TPL=[
+{bab:'Integer',lv:1,judul:'Persegi Panjang',cerita:'Diketahui panjang (p) dan lebar (l) sebuah persegi panjang. Buatlah algoritma untuk menghitung keliling (2p + 2l) dan luas (p x l).',masukan:'Dua bilangan bulat positif p dan l.',keluaran:'Dua bilangan: keliling, lalu luas.',
+ kunci:K('program PersegiPanjang','kamus','  p, l, kel, luas : integer','algoritma','  input(p, l)','  kel = 2 * p + 2 * l','  luas = p * l','  output(kel, luas)','endprogram'),
+ kasus:function(){return[R(2,9)+' '+R(2,9),R(20,90)+' '+R(10,60),R(2,9)+' '+R(30,80)]},
+ pj:function(a,o){return 'p = '+a[0]+', l = '+a[1]+'; keliling = '+o[0]+', luas = '+o[1]}},
+{bab:'Integer',lv:1,judul:'Umur',cerita:'Diketahui tahun lahir seseorang dan tahun sekarang. Buatlah algoritma untuk menghitung umurnya sekarang dan umurnya 10 tahun lagi.',masukan:'Dua bilangan bulat: tahun lahir, lalu tahun sekarang.',keluaran:'Dua bilangan: umur sekarang, lalu umur 10 tahun lagi.',
+ kunci:K('program Umur','kamus','  lahir, kini, umur : integer','algoritma','  input(lahir, kini)','  umur = kini - lahir','  output(umur, umur + 10)','endprogram'),
+ kasus:function(){return[R(1995,2008)+' 2026',R(1985,1999)+' 2026',R(2009,2014)+' 2026']},
+ pj:function(a,o){return 'lahir '+a[0]+': umur = '+o[0]+', 10 tahun lagi = '+o[1]}},
+{bab:'Integer',lv:2,judul:'Konversi Detik',cerita:'Ubahlah sejumlah detik menjadi jam, menit, dan sisa detik.',masukan:'Sebuah bilangan bulat positif t (dalam detik).',keluaran:'Tiga bilangan: jam, menit, dan detik.',
+ kunci:K('program Detik','kamus','  t, j, m, d : integer','algoritma','  input(t)','  j = t div 3600','  m = (t mod 3600) div 60','  d = t mod 60','  output(j, m, d)','endprogram'),
+ kasus:function(){return[''+R(100,3599),''+R(3600,20000),''+R(20000,86000)]},
+ pj:function(a,o){return a[0]+' detik = '+o[0]+' jam '+o[1]+' menit '+o[2]+' detik'}},
+{bab:'Integer',lv:2,judul:'Belanja',cerita:'Harga satu buku adalah h rupiah. Budi membeli n buku dan membayar dengan uang b rupiah. Hitunglah total belanja dan kembaliannya.',masukan:'Tiga bilangan bulat: h, n, dan b (b cukup untuk membayar).',keluaran:'Dua bilangan: total belanja, lalu kembalian.',
+ kunci:K('program Belanja','kamus','  h, n, b, total : integer','algoritma','  input(h, n, b)','  total = h * n','  output(total, b - total)','endprogram'),
+ kasus:function(){return[0,0,0].map(function(){var h=R(2,15)*1000,n=R(2,6);return h+' '+n+' '+(Math.ceil(h*n/10000)*10000+R(0,1)*10000)})},
+ pj:function(a,o){return 'total = '+a[0]+' x '+a[1]+' = '+o[0]+'; kembalian = '+o[1]}},
+{bab:'Integer',lv:3,judul:'Bagi Kelompok',cerita:'Sebanyak n siswa dibagi ke dalam kelompok beranggotakan k siswa. Tampilkan banyak kelompok penuh, banyak siswa yang tidak masuk kelompok penuh, dan banyak kelompok yang dibutuhkan agar semua siswa mendapat kelompok.',masukan:'Dua bilangan bulat positif n dan k.',keluaran:'Tiga bilangan: kelompok penuh, siswa sisa, dan total kelompok yang dibutuhkan.',
+ kunci:K('program Kelompok','kamus','  n, k, penuh, sisa, total : integer','algoritma','  input(n, k)','  penuh = n div k','  sisa = n mod k','  total = (n + k - 1) div k','  output(penuh, sisa, total)','endprogram'),
+ kasus:function(){var k=R(3,8);return[(k*R(3,6))+' '+k,(k*R(3,6)+R(1,k-1))+' '+k,R(2,k-1)+' '+k]},
+ pj:function(a,o){return a[0]+' siswa, '+a[1]+' per kelompok: '+o[0]+' penuh, sisa '+o[1]+', butuh '+o[2]+' kelompok'}},
+{bab:'Integer',lv:3,judul:'Sandi',cerita:'Jumlahkan digit pertama dan digit terakhir dari bilangan berdigit 4. Contoh: 2345 menghasilkan 2 + 5 = 7.',masukan:'Sebuah bilangan bulat n berdigit 4.',keluaran:'Satu bilangan: jumlah digit pertama dan terakhir.',
+ kunci:K('program Sandi','kamus','  n : integer','algoritma','  input(n)','  output(n div 1000 + n mod 10)','endprogram'),
+ kasus:function(){return[''+R(1000,9999),''+R(1000,9999),''+(R(1,9)*1000+R(0,99)*10)]},
+ pj:function(a,o){return 'digit pertama '+a[0].charAt(0)+' + digit terakhir '+a[0].slice(-1)+' = '+o[0]}},
+{bab:'For-loop',lv:1,judul:'Cetak Barisan',cerita:'Buatlah algoritma untuk mencetak barisan bilangan dari n sampai m, dengan n < m.',masukan:'Dua bilangan bulat positif n dan m.',keluaran:'Barisan bilangan dari n hingga m.',
+ kunci:K('program Barisan','kamus','  n, m, i : integer','algoritma','  input(n, m)','  for i = n to m do','    output(i)','  endfor','endprogram'),
+ kasus:function(){var a=R(1,6);return[a+' '+(a+R(3,7)),R(5,20)+' '+R(21,26),'1 '+R(4,8)]}},
+{bab:'For-loop',lv:2,judul:'Renang',cerita:'Seorang pelatih mencatat jarak renang setiap perenang dalam 5 putaran. Setiap perenang berenang x meter di tiap putaran. Tampilkan total jarak tiap perenang.',masukan:'Bilangan n (jumlah perenang), diikuti n baris yang masing-masing berisi x.',keluaran:'n baris total jarak tiap perenang.',
+ kunci:K('program Renang','kamus','  n, j, x : integer','algoritma','  input(n)','  for j = 1 to n do','    input(x)','    output(x * 5)','  endfor','endprogram'),
+ kasus:function(){return[2,3,4].map(function(n){var a=[n];for(var i=0;i<n;i++)a.push(R(30,90));return a.join('\n')})}},
+{bab:'For-loop',lv:2,judul:'Tabel Perkalian',cerita:'Adik Rina sedang belajar perkalian. Tampilkan tabel perkalian bilangan n, mulai dari n x 1 sampai n x k.',masukan:'Dua bilangan bulat positif n dan k.',keluaran:'k baris dengan format n x i = hasil.',
+ kunci:K('program TabelPerkalian','kamus','  n, k, i : integer','algoritma','  input(n, k)','  for i = 1 to k do','    output(n, "x", i, "=", n * i)','  endfor','endprogram'),
+ kasus:function(){return[R(2,9)+' '+R(3,5),R(2,9)+' '+R(3,5),R(2,9)+' '+R(3,5)]}},
+{bab:'For-loop',lv:3,judul:'Faktorial',cerita:'Hitunglah faktorial n, yaitu n x (n-1) x ... x 1. Ingat bahwa 1! = 1.',masukan:'Sebuah bilangan bulat positif n.',keluaran:'Satu bilangan: n!',
+ kunci:K('program Faktorial','kamus','  n, i, hasil : integer','algoritma','  input(n)','  hasil = 1','  for i = 2 to n do','    hasil = hasil * i','  endfor','  output(hasil)','endprogram'),
+ kasus:function(){return['1',''+R(3,6),''+R(7,10)]},
+ pj:function(a,o){return a[0]+'! = '+o[0]}},
+{bab:'For-loop',lv:3,judul:'Tinggi Tanaman',cerita:'Diberikan n data tinggi tanaman. Tampilkan selisih setiap data dengan data sebelumnya.',masukan:'Bilangan n, diikuti n baris tinggi tanaman.',keluaran:'n - 1 bilangan selisih.',
+ kunci:K('program Tanaman','kamus','  n, i, tinggi, sebelum : integer','algoritma','  input(n)','  input(sebelum)','  for i = 2 to n do','    input(tinggi)','    output(tinggi - sebelum)','    sebelum = tinggi','  endfor','endprogram'),
+ kasus:function(){return[3,4,5].map(function(n){var a=[n];for(var i=0;i<n;i++)a.push(R(5,30));return a.join('\n')})}},
+{bab:'Integer',lv:1,judul:'Mencari Posisi',cerita:'Sebuah benda bergerak dengan kecepatan tetap. Jika posisi awal, kecepatan, dan waktu diketahui, hitunglah posisi akhirnya. Jarak = kecepatan x waktu, dan posisi akhir = posisi awal + jarak.',masukan:'Tiga bilangan bulat: posisi awal, kecepatan, dan waktu.',keluaran:'Satu bilangan: posisi akhir.',
+ kunci:K('program Jarak','kamus','  posisi, posisi0, kecepatan, waktu : integer','algoritma','  input(posisi0, kecepatan, waktu)','  posisi = posisi0 + (kecepatan * waktu)','  output(posisi)','endprogram'),
+ kasus:function(){return[R(1,50)+' '+R(2,9)+' '+R(2,12),R(10,90)+' '+R(1,5)+' '+R(10,30),R(100,200)+' 1 1']},
+ pj:function(a,o){return 'jarak = '+a[1]+' x '+a[2]+' = '+(a[1]*a[2])+', posisi akhir = '+a[0]+' + '+(a[1]*a[2])+' = '+o[0]}},
+{bab:'Integer',lv:1,judul:'Konversi Hari',cerita:'Ubahlah sejumlah hari menjadi banyak minggu penuh dan sisa harinya. Gunakan div untuk hasil bagi bulat dan mod untuk sisa.',masukan:'Sebuah bilangan bulat positif h (jumlah hari).',keluaran:'Dua bilangan: minggu dan sisa hari.',
+ kunci:K('program Hari','kamus','  h, minggu, sisa : integer','algoritma','  input(h)','  minggu = h div 7','  sisa = h mod 7','  output(minggu, sisa)','endprogram'),
+ kasus:function(){return[''+R(8,20),''+(7*R(3,12)),''+R(30,120)]},
+ pj:function(a,o){return a[0]+' hari = '+o[0]+' minggu dan '+o[1]+' hari'}},
+{bab:'Integer',lv:2,judul:'Digit Bilangan',cerita:'Diberikan sebuah bilangan tiga digit. Tampilkan digit ratusan, puluhan, dan satuannya dengan memanfaatkan div dan mod.',masukan:'Sebuah bilangan bulat n berdigit 3.',keluaran:'Tiga bilangan: ratusan, puluhan, dan satuan.',
+ kunci:K('program Digit','kamus','  n, r, p, s : integer','algoritma','  input(n)','  r = n div 100','  p = (n mod 100) div 10','  s = n mod 10','  output(r, p, s)','endprogram'),
+ kasus:function(){return[''+R(100,999),''+R(100,999),''+(R(1,9)*100+R(0,9))]},
+ pj:function(a,o){return a[0]+': ratusan '+o[0]+', puluhan '+o[1]+', satuan '+o[2]}},
+{bab:'Integer',lv:3,judul:'Balik Bilangan',cerita:'Balikkan urutan digit sebuah bilangan tiga digit. Contoh: 123 menjadi 321. Jika hasil balikannya diawali nol, tampilkan sebagai bilangan bulat biasa (120 menjadi 21).',masukan:'Sebuah bilangan bulat n berdigit 3.',keluaran:'Satu bilangan: hasil pembalikan digit.',
+ kunci:K('program Balik','kamus','  n, r, p, s : integer','algoritma','  input(n)','  r = n div 100','  p = (n mod 100) div 10','  s = n mod 10','  output(s * 100 + p * 10 + r)','endprogram'),
+ kasus:function(){return[''+R(100,999),''+(R(1,9)*100+R(1,9)*10+R(1,9)),''+(R(1,9)*100+R(1,9)*10)]},
+ pj:function(a,o){return a[0]+' dibalik menjadi '+o[0]}},
+{bab:'Integer',lv:3,judul:'Uang Pecahan',cerita:'Sejumlah uang kelipatan 10000 akan ditukar dengan pecahan 50000, 20000, dan 10000. Gunakan pecahan terbesar lebih dulu, lalu tampilkan banyak lembar tiap pecahan.',masukan:'Sebuah bilangan bulat positif u, kelipatan 10000.',keluaran:'Tiga bilangan: lembar 50000, lembar 20000, dan lembar 10000.',
+ kunci:K('program Pecahan','kamus','  u, sisa, l50, l20, l10 : integer','algoritma','  input(u)','  l50 = u div 50000','  sisa = u mod 50000','  l20 = sisa div 20000','  sisa = sisa mod 20000','  l10 = sisa div 10000','  output(l50, l20, l10)','endprogram'),
+ kasus:function(){return[''+(R(2,9)*10000),''+(R(10,25)*10000),''+(50000*R(1,3))]},
+ pj:function(a,o){return a[0]+' = '+o[0]+' lembar 50000, '+o[1]+' lembar 20000, '+o[2]+' lembar 10000'}},
+{bab:'Boolean',lv:1,judul:'Bilangan Positif',cerita:'Sebuah program menentukan apakah suatu bilangan positif atau negatif. Anggap 0 (nol) sebagai bilangan positif.',masukan:'Sebuah bilangan bulat.',keluaran:'Boolean: true jika positif, false jika negatif.',
+ kunci:K('program Bilangan','kamus','  bilangan : integer','  status : boolean','algoritma','  input(bilangan)','  status = bilangan >= 0','  output(status)','endprogram'),
+ kasus:function(){return[''+R(1,99),''+(-R(1,99)),'0']},
+ pj:function(a,o){return a[0]+(o[0]==='true'?' adalah bilangan positif':' adalah bilangan negatif')}},
+{bab:'Boolean',lv:1,judul:'Ganjil',cerita:'Sebuah program mengecek apakah suatu bilangan adalah bilangan ganjil.',masukan:'Sebuah bilangan bulat positif n.',keluaran:'Boolean: true jika n ganjil, false jika sebaliknya.',
+ kunci:K('program Ganjil','kamus','  n : integer','  status : boolean','algoritma','  input(n)','  status = n mod 2 == 1','  output(status)','endprogram'),
+ kasus:function(){return[''+(R(1,40)*2+1),''+(R(2,50)*2),''+(R(40,99)*2+1)]},
+ pj:function(a,o){return a[0]+(o[0]==='true'?' adalah bilangan ganjil':' adalah bilangan genap')}},
+{bab:'Boolean',lv:2,judul:'Cumlaude',cerita:'Mahasiswa dikatakan cumlaude apabila lulus maksimal 8 semester dan nilai EPrT tidak kurang dari 500.',masukan:'Dua bilangan bulat: jumlah semester hingga lulus, lalu skor EPrT.',keluaran:'Boolean: true jika cumlaude, false jika sebaliknya.',
+ kunci:K('program Cumlaude','kamus','  semester, eprt : integer','  status : boolean','algoritma','  input(semester, eprt)','  status = (semester <= 8) and (eprt >= 500)','  output(status)','endprogram'),
+ kasus:function(){return[R(6,8)+' '+R(500,620),R(9,12)+' '+R(500,650),R(6,8)+' '+R(400,499)]},
+ pj:function(a,o){return a[0]+' semester, EPrT '+a[1]+(o[0]==='true'?': cumlaude':': tidak cumlaude')}},
+{bab:'Boolean',lv:2,judul:'Kelipatan Tiga atau Lima',cerita:'Sebuah bilangan dikatakan menarik jika habis dibagi 3 atau habis dibagi 5.',masukan:'Sebuah bilangan bulat positif n.',keluaran:'Boolean: true jika n menarik, false jika sebaliknya.',
+ kunci:K('program Menarik','kamus','  n : integer','  status : boolean','algoritma','  input(n)','  status = (n mod 3 == 0) or (n mod 5 == 0)','  output(status)','endprogram'),
+ kasus:function(){return[''+(3*R(2,20)),''+(5*R(2,20)),''+(R(1,40)*15+R(1,2))]},
+ pj:function(a,o){return a[0]+(o[0]==='true'?' habis dibagi 3 atau 5':' tidak habis dibagi 3 maupun 5')}},
+{bab:'Boolean',lv:3,judul:'Digit Terurut',cerita:'Sebuah bilangan tiga digit dikatakan terurut mengecil jika digit pertama lebih besar dari digit kedua, dan digit kedua lebih besar dari digit ketiga.',masukan:'Sebuah bilangan bulat positif tiga digit.',keluaran:'Boolean: true jika terurut mengecil, false jika sebaliknya.',
+ kunci:K('program Terurut','kamus','  n, a, b, c : integer','  status : boolean','algoritma','  input(n)','  a = n div 100','  b = (n mod 100) div 10','  c = n mod 10','  status = (a > b) and (b > c)','  output(status)','endprogram'),
+ kasus:function(){var x=R(3,9),y=R(1,x-1),z=R(0,y-1);return[''+(x*100+y*10+z),''+(R(1,9)*111),''+R(100,999)]},
+ pj:function(a,o){return a[0]+(o[0]==='true'?': setiap digit terurut mengecil':': digit tidak terurut mengecil')}}
+];
+function jalankanKunci(src,inp){
+ var a=ta.value,b=$('masuk').value,o=$('out').textContent,h=$('hasil').innerHTML;
+ ta.value=src;$('masuk').value=inp;jalankan();var r=$('out').textContent;
+ ta.value=a;$('masuk').value=b;$('out').textContent=o;$('hasil').innerHTML=h;return r}
+function buat(t,no){return{t:t,no:no,rows:t.kasus().map(function(k){var o=jalankanKunci(t.kunci,k);
+ return{m:k,o:o,pj:t.pj?t.pj(k.split(/\s+/),o.split(/\s+/)):''}})}}
+function kartu(s){var t=s.t,h='<section class="sc"><h3>Soal #'+s.no+' '+t.judul+'</h3><div><span class="tag">'+t.bab+'</span><span class="tag">'+LV[t.lv]+'</span></div>'
+ +'<div class="cb"><p>'+t.cerita+'</p><p><b>Masukan</b> '+t.masukan+'</p><p><b>Keluaran</b> '+t.keluaran+'</p></div>'
+ +'<h4>Contoh masukan dan keluaran</h4><div class="sc-wrap"><table class="ct"><tr><th>No</th><th>Masukan</th><th>Keluaran</th><th>Penjelasan</th></tr>';
+ s.rows.forEach(function(r,i){h+='<tr><td>'+(i+1)+'</td><td>'+esc(r.m)+'</td><td>'+esc(r.o)+'</td><td>'+esc(r.pj)+'</td></tr>'});
+ return h+'</table></div><div class="row"><button class="main" data-a="kerja" data-i="'+(s.no-1)+'" type="button">Kerjakan di editor</button><button data-a="kunci" type="button">Lihat kunci</button></div><pre hidden>'+esc(t.kunci)+'</pre></section>'}
+var SOAL=[];
+function show(v){['v-home','v-edit','v-acak','v-guide','v-uts'].forEach(function(id){$(id).hidden=id!==v});[].forEach.call(document.querySelectorAll('.tab'),function(b){b.classList.toggle('on',b.dataset.v===v)})}
+[].forEach.call(document.querySelectorAll('.tab'),function(b){b.onclick=function(){show(b.dataset.v);if(b.dataset.v==='v-acak'&&!SOAL.length)$('cGo').onclick()}});
+var ON={Integer:1,Boolean:1,'For-loop':1};
+$('cBab').innerHTML=['Integer','Real','Character','Boolean','String','Konstanta','For-loop'].map(function(b){return '<label class="chip'+(ON[b]?'':' off')+'"><input type="checkbox" value="'+b+'"'+(ON[b]?' checked':' disabled')+'> '+(ON[b]?'':ic('lock')+' ')+b+(ON[b]?'':' (belum tersedia)')+'</label>'}).join('');
+$('cLv').innerHTML=['Semua','Mudah','Sedang','Sulit'].map(function(n,i){return '<label class="chip"><input type="radio" name="lv" value="'+i+'"'+(i?'':' checked')+'> '+n+'</label>'}).join('');
+$('cGo').onclick=function(){
+ var bs=[].map.call(document.querySelectorAll('#cBab input:checked'),function(x){return x.value}),lv=+document.querySelector('#cLv input:checked').value,n=+$('cN').value;
+ var pool=TPL.filter(function(t){return bs.indexOf(t.bab)>=0&&(!lv||t.lv===lv)});
+ if(!pool.length){SOAL=[];$('cOut').innerHTML='<section class="sc"><p>Belum ada soal untuk pilihan itu. Coba bab atau tingkat lain.</p></section>';return}
+ for(var i=pool.length-1;i>0;i--){var j=R(0,i),x=pool[i];pool[i]=pool[j];pool[j]=x}
+ var sel=[];while(sel.length<n)sel=sel.concat(pool);
+ SOAL=sel.slice(0,n).map(function(t,i){return buat(t,i+1)});
+ $('cOut').innerHTML=SOAL.map(kartu).join('')};
+$('cOut').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+ if(b.dataset.a==='kunci'){var p=b.closest('section').querySelector('pre');p.hidden=!p.hidden}
+ else if(b.dataset.a==='kerja'){var s=SOAL[+b.dataset.i],r=s.rows[0],id='u'+Date.now();
+  kustom.push({id:id,judul:s.t.judul+' ('+LV[s.t.lv]+')',isi:s.t.cerita+'\n\nMasukan: '+s.t.masukan+'\nKeluaran: '+s.t.keluaran,contoh:s.rows.map(function(x){return{m:x.m,o:x.o,pj:x.pj}}),kunci:s.t.kunci,uji:s.t.kasus(),masuk:r.m});
+  simpan();pilih(id);show('v-edit');window.scrollTo(0,0)}});
+/* ===== TABEL CONTOH + UJI OTOMATIS ===== */
+function tabel(s){var c=s.contoh;
+ if(!c&&s.kunci&&s.masuk)c=s.contoh=[{m:s.masuk,o:jalankanKunci(s.kunci,s.masuk)}];
+ if(!c||!c.length)return;
+ var pj=c.some(function(x){return x.pj}),h='<h3 style="margin:12px 0 4px;font-size:.95rem">Contoh masukan dan keluaran</h3><div class="sc-wrap"><table class="ct"><tr><th>No</th><th>Masukan</th><th>Keluaran</th>'+(pj?'<th>Penjelasan</th>':'')+'</tr>';
+ c.forEach(function(x,i){h+='<tr><td>'+(i+1)+'</td><td>'+esc(x.m)+'</td><td>'+esc(x.o)+'</td>'+(pj?'<td>'+esc(x.pj||'')+'</td>':'')+'</tr>'});
+ $('soalbox').insertAdjacentHTML('beforeend',h+'</table></div>')}
+function norm(s){return s.trim().split(/\s+/).filter(Boolean)}
+function sama(a,b){var x=norm(a),y=norm(b);if(x.length!==y.length)return false;
+ return x.every(function(t,i){var u=y[i];if(/^-?\d+$/.test(t)&&/^-?\d+$/.test(u))return t===u;
+  if(isFinite(t)&&isFinite(u))return Math.abs(parseFloat(t)-parseFloat(u))<=0.01;return t===u})}
+function ujiJawaban(){var s=cari(aktif),box=$('uji'),n0=(s.contoh||[]).length,cs=[],rows=[],ok0=0;
+ if(!ta.value.trim()){box.innerHTML='<p class="hint">Tulis kodenya dulu.</p>';return}
+ var r=analisis();if(r.err.length){tampil(r);box.innerHTML='<p class="stat bad">Perbaiki kesalahan struktur dulu, lalu uji lagi.</p>';return}
+ (s.contoh||[]).forEach(function(c){cs.push({m:c.m,e:c.o,h:false})});
+ (s.uji||[]).forEach(function(m){cs.push({m:m,e:jalankanKunci(s.kunci,m),h:true})});
+ if(!cs.length){box.innerHTML='<p class="hint">Soal ini belum punya contoh. Tambahkan contoh masukan dan keluaran pada form soal.</p>';return}
+ cs.forEach(function(c,i){var got=jalankanKunci(ta.value,c.m),ok=sama(got,c.e);if(ok)ok0++;
+  rows.push('<tr><td>'+(c.h?'Uji tersembunyi '+(i-n0+1):'Contoh '+(i+1))+'</td><td class="'+(ok?'ok':'bad')+'">'+(ok?'\u2713 Benar':'\u2715 Salah')+'</td><td>'+(c.h?'':esc(c.m)+' \u2192 seharusnya '+esc(c.e)+(ok?'':' | keluaranmu: '+esc(got)))+'</td></tr>')});
+ box.innerHTML='<h3>Hasil uji: '+ok0+' dari '+cs.length+' benar'+(ok0===cs.length?' \u2713':'')+'</h3><div class="sc-wrap"><table class="ct">'+rows.join('')+'</table></div>'}
+$('periksa').onclick=ujiJawaban;
+function fRow(){var d=document.createElement('div');d.className='fr';d.innerHTML='<textarea rows="2" placeholder="Masukan"></textarea><textarea rows="2" placeholder="Keluaran"></textarea>';$('fRows').appendChild(d)}
+$('fAdd').onclick=fRow;fRow();
+$('tambah').onclick=function(){var j=$('jd').value.trim(),t=$('isi').value.trim();
+ if(!j||!t){$('info').textContent='Judul dan isi soal harus diisi.';return}
+ var cs=[].map.call(document.querySelectorAll('#fRows .fr'),function(d){return{m:d.children[0].value.trim(),o:d.children[1].value.trim()}}).filter(function(c){return c.m&&c.o});
+ var id='u'+Date.now();kustom.push({id:id,judul:j,isi:t,contoh:cs,masuk:cs.length?cs[0].m:''});simpan();
+ $('jd').value='';$('isi').value='';$('fRows').innerHTML='';fRow();$('info').textContent='Soal tersimpan di browser ini.';pilih(id)};
+/* ===== NAVIGASI, IKON, PANEL LIPAT ===== */
+var gm=document.createElement('main');gm.id='v-guide';gm.className='solo';gm.hidden=true;
+gm.appendChild(document.querySelector('#v-edit .stack > section:last-child'));$('v-acak').insertAdjacentElement('afterend',gm);
+[].forEach.call(document.querySelectorAll('[data-ic]'),function(e){e.innerHTML=ic(e.dataset.ic)});
+$('jalan').insertAdjacentHTML('afterbegin',ic('play')+' ');$('periksa').insertAdjacentHTML('afterbegin',ic('check')+' ');$('tema').insertAdjacentHTML('afterbegin',ic('moon')+' ');
+[].forEach.call(document.querySelectorAll('[data-go]'),function(b){b.onclick=function(){document.querySelector('.tab[data-v="'+b.dataset.go+'"]').click()}});
+var bukaList=innerWidth>820;try{var uu=localStorage.getItem('pc_list');if(uu!==null)bukaList=uu==='1'}catch(e){}
+function ringkas(){$('tgTxt').textContent=bukaList?'Daftar soal':cari(aktif).judul+' \u00b7 '+semua().length+' soal'}
+function setList(o,nosave){bukaList=o;$('listBody').hidden=!o;$('tgList').setAttribute('aria-expanded',o);$('tgList').classList.toggle('open',o);$('v-edit').classList.toggle('cl',!o);
+ if(!nosave){try{localStorage.setItem('pc_list',o?'1':'0')}catch(e){}}ringkas()}
+$('tgList').onclick=function(){setList(!bukaList)};
+$('tgForm').onclick=function(){var h=$('formBody').hidden;$('formBody').hidden=!h;this.setAttribute('aria-expanded',h);this.classList.toggle('open',h)};
+gambarDaftar=function(){var ul=$('daftar');ul.innerHTML='';
+ [['Bawaan',function(s){return s.id.charAt(0)==='b'}],['Dari Latihan Acak',function(s){return s.id.charAt(0)==='u'&&s.kunci}],['Buatanku',function(s){return s.id.charAt(0)==='u'&&!s.kunci}]].forEach(function(g){
+  var L=semua().filter(g[1]);if(!L.length)return;
+  var h=document.createElement('li');h.className='gh';h.innerHTML='<span>'+g[0]+' ('+L.length+')</span>';
+  if(g[0]==='Dari Latihan Acak'){var x=document.createElement('button');x.type='button';x.className='del';x.title='Hapus semua soal dari Latihan Acak';x.setAttribute('aria-label',x.title);x.innerHTML=ic('trash');
+   x.onclick=function(){if(!confirm('Hapus semua soal dari Latihan Acak?'))return;L.forEach(function(s){delete draf[s.id]});kustom=kustom.filter(function(k){return !k.kunci});
+    if(!kustom.some(function(k){return k.id===aktif})&&aktif.charAt(0)==='u')aktif=BAWAAN[0].id;simpan();pilih(aktif)};h.appendChild(x)}
+  ul.appendChild(h);
+  L.forEach(function(s){var li=document.createElement('li'),b=document.createElement('button');b.type='button';b.className='pick'+(s.id===aktif?' on':'');b.textContent=s.judul;b.onclick=function(){pilih(s.id)};li.appendChild(b);
+   if(s.id.charAt(0)==='u'){var d=document.createElement('button');d.type='button';d.className='del';d.title='Hapus soal';d.setAttribute('aria-label','Hapus soal '+s.judul);d.innerHTML=ic('trash');
+    d.onclick=function(){kustom=kustom.filter(function(k){return k.id!==s.id});delete draf[s.id];simpan();if(aktif===s.id)aktif=BAWAAN[0].id;pilih(aktif)};li.appendChild(d)}
+   ul.appendChild(li)})})};
+
+/* ===== MODE UTS ===== */
+var UTS_BANK_KEY='pseudocode_uts_bank_v1',UTS_SESSION_KEY='pseudocode_uts_session_v1';
+var utsBank=[],utsSession=null,utsIndex=0,utsTimer=null;
+var utsDefaults=[
+ {q:'Bagian pseudocode yang berisi deklarasi variabel disebut ...',o:['PROGRAM','KAMUS','ALGORITMA','ENDPROGRAM'],a:1,e:'KAMUS berisi deklarasi variabel dan tipe datanya.'},
+ {q:'Perintah untuk menerima masukan dari pengguna adalah ...',o:['output()','input()','print()','show()'],a:1,e:'input() digunakan untuk membaca masukan.'},
+ {q:'Jika a = 7 dan b = 3, hasil a div b adalah ...',o:['1','2','2,33','3'],a:1,e:'div menghasilkan hasil bagi bilangan bulat: 7 div 3 = 2.'},
+ {q:'Operator mod digunakan untuk memperoleh ...',o:['Hasil desimal','Sisa pembagian','Nilai terbesar','Nilai absolut'],a:1,e:'mod menghasilkan sisa pembagian.'},
+ {q:'Struktur untuk memilih tindakan berdasarkan kondisi adalah ...',o:['if','input','output','KAMUS'],a:0,e:'if menjalankan percabangan berdasarkan kondisi.'},
+ {q:'Tipe data untuk nilai true atau false adalah ...',o:['integer','real','boolean','string'],a:2,e:'boolean menyimpan nilai true atau false.'},
+ {q:'Perulangan yang memeriksa kondisi sebelum menjalankan blok adalah ...',o:['while','output','input','KAMUS'],a:0,e:'while memeriksa kondisi sebelum iterasi.'},
+ {q:'Jika x = 4, nilai x * 2 + 3 adalah ...',o:['8','9','11','14'],a:2,e:'4 × 2 + 3 = 11.'},
+ {q:'output("Nilai", x) digunakan untuk ...',o:['Membaca x','Mendeklarasikan x','Menampilkan teks dan x','Menghapus x'],a:2,e:'output menampilkan informasi ke keluaran.'},
+ {q:'Penanda akhir program pada format website ini adalah ...',o:['STOP','ENDPROGRAM','SELESAI','END'],a:1,e:'Program diakhiri dengan ENDPROGRAM.'},
+ {q:'Jika n = 10, hasil n mod 3 adalah ...',o:['1','2','3','0'],a:0,e:'10 dibagi 3 bersisa 1.'},
+ {q:'Tipe real paling tepat digunakan untuk ...',o:['Bilangan pecahan','Benar/salah','Satu karakter','Nama program'],a:0,e:'real digunakan untuk bilangan yang dapat memiliki pecahan.'},
+ {q:'Operator logika and bernilai true apabila ...',o:['Minimal satu kondisi true','Semua kondisi true','Semua kondisi false','Kondisi pertama false'],a:1,e:'and bernilai true jika semua kondisi bernilai true.'},
+ {q:'Pada for i <- 1 to 5 do, rentang nilai i adalah ...',o:['0 sampai 5','1 sampai 4','1 sampai 5','2 sampai 5'],a:2,e:'Batas awal dan akhir pada bentuk ini ikut dihitung.'},
+ {q:'Penugasan hasil <- a + b berarti ...',o:['Membandingkan hasil','Mengisi hasil dengan a+b','Menghapus hasil','Menampilkan a dan b'],a:1,e:'Operator penugasan mengisi variabel hasil dengan nilai a+b.'}
+,
+
+ {q:'Soal Nilai Akhir (NA): masukan terdiri dari berapa bilangan bulat?',o:['2 bilangan','3 bilangan','4 bilangan: tugas, kuis, ujian, praktikum','5 bilangan'],a:2,e:'Soal 1 halaman 2: empat bilangan bulat, yaitu nilai tugas, kuis, ujian, dan praktikum.'},
+ {q:'Pada soal Nilai Akhir (NA), struktur kontrol perulangan ...',o:['Wajib digunakan','Tidak perlu digunakan','Harus memakai while','Harus memakai for'],a:1,e:'Catatan soal 1 halaman 2 menyebutkan tidak perlu menggunakan perulangan.'},
+ {q:'Pada soal Pohon Mangga, tiga masukan yang dibaca adalah ...',o:['Tinggi pohon, umur pohon, jumlah mangga','Bayangan tongkat (A), bayangan pohon (B), panjang tangga','Diameter, tinggi, dan jari-jari','Nilai tugas, kuis, dan ujian'],a:1,e:'Soal 2 halaman 3 meminta panjang bayangan tongkat, panjang bayangan pohon, dan panjang tangga.'},
+ {q:'Tangga dinyatakan menjangkau pohon jika ...',o:['Panjang tangga lebih kecil dari tinggi pohon','Panjang tangga sama dengan nol','Panjang tangga tidak kurang dari tinggi pohon','Bayangan pohon lebih pendek dari tongkat'],a:2,e:'Keterangan soal 2 halaman 3: panjang tangga tidak kurang dari tinggi pohon.'},
+ {q:'Bilangan x disebut Armstrong jika ...',o:['x habis dibagi y','Jumlah digit yang dipangkatkan y sama dengan x','Digit pertama sama dengan digit terakhir','x merupakan bilangan genap'],a:1,e:'Definisi pada soal 3 halaman 4.'},
+ {q:'Pada soal Armstrong, nilai y menyatakan ...',o:['Nilai terbesar dari x','Panjang digit dari x','Sisa pembagian x','Jumlah digit ganjil'],a:1,e:'Soal 3 halaman 4 menyatakan y adalah panjang digit x.'},
+ {q:'Pada soal tracing halaman 5, nilai awal z ditetapkan menjadi ...',o:['4','8','10','5742'],a:1,e:'Baris 6 algoritma Soal 4 menetapkan z = 8.'},
+ {q:'Pada soal enkripsi kode rahasia, masukan m berupa ...',o:['Bilangan riil 2 digit','Bilangan bulat 4 digit dengan 1000 < m < 9999','String bebas','Bilangan negatif'],a:1,e:'Soal halaman 7 menyebut m bilangan bulat berdigit empat.'},
+ {q:'Pada soal cake, masukan yang diperlukan adalah ...',o:['N, diameter cake (d), dan tebal/tinggi (t)','Jari-jari, suhu, dan massa','Jumlah kue dan harga','Panjang, lebar, dan warna'],a:0,e:'Soal halaman 8 meminta N, diameter d, dan tebal/tinggi t.'},
+ {q:'Pada soal cake, keluaran program adalah ...',o:['Luas seluruh loyang','Volume seluruh cake','Luas permukaan satu potongan cake','Jumlah potongan yang rusak'],a:2,e:'Soal halaman 8 meminta luas permukaan satu potongan cake.'}];
+var utsCodingDefaults=[
+ {type:'coding',level:'Mudah',q:'Soal Nilai Akhir (NA) — Buat pseudocode yang membaca empat nilai integer: tugas, kuis, ujian, dan praktikum. Tampilkan nilai akhir sesuai bobot yang ditentukan pengajar. Jika bobot tidak dicantumkan, tuliskan asumsi yang kamu gunakan.',rubric:['Membaca empat input: tugas, kuis, ujian, praktikum','Menghitung nilai akhir sesuai bobot/asumsi yang dinyatakan','Menampilkan hasil dengan label yang jelas'],e:'Soal Nilai Akhir pada PDF meminta empat input tersebut. Bobot perhitungan harus mengikuti instruksi pengajar.'},
+ {type:'coding',level:'Sedang',q:'Soal Pohon Mangga — Buat pseudocode yang membaca panjang bayangan tongkat 1 meter (A), panjang bayangan pohon (B), dan panjang tangga. Hitung perkiraan tinggi pohon dengan perbandingan bayangan, lalu tentukan apakah tangga dapat menjangkau pohon.',rubric:['Membaca A, B, dan panjang tangga','Menghitung tinggi pohon dengan perbandingan B terhadap A','Membandingkan panjang tangga dengan tinggi pohon','Menampilkan tinggi pohon dan hasil boolean'],e:'Berdasarkan soal Pohon Mangga pada PDF: tinggi pohon ditaksir dari perbandingan bayangan lalu dibandingkan dengan panjang tangga.'},
+ {type:'coding',level:'Sulit',q:'Soal Armstrong — Buat pseudocode yang membaca bilangan positif x dan banyak digitnya y. Hitung jumlah setiap digit x yang dipangkatkan y, lalu tampilkan jumlah tersebut dan apakah x merupakan bilangan Armstrong.',rubric:['Membaca x dan y','Menggunakan perulangan untuk mengambil setiap digit','Memangkatkan setiap digit dengan y dan menjumlahkannya','Membandingkan jumlah dengan x dan menampilkan hasil boolean'],e:'Soal ini memerlukan perulangan untuk memproses digit. Gunakan div dan mod sesuai sintaks materi.'},
+ {type:'coding',level:'Sulit',q:'Tracing algoritma — Kerjakan tracing dari algoritma pada soal tracing UTS yang dipelajari. Tuliskan nilai setiap variabel pada setiap iterasi, kondisi yang diperiksa, dan keluaran akhirnya.',rubric:['Menuliskan nilai awal variabel','Mencatat perubahan variabel pada setiap iterasi','Mengevaluasi kondisi perulangan/percabangan','Menuliskan keluaran akhir'],e:'Penilaian tracing harus merujuk algoritma lengkap pada lembar soal.'}
+];
+function utsValid(q){return q&&typeof q.q==='string'&&q.q.trim()&&Array.isArray(q.o)&&q.o.length===4&&q.o.every(function(x){return typeof x==='string'&&x.trim()})&&Number.isInteger(q.a)&&q.a>=0&&q.a<4}
+function utsLoad(){try{var b=JSON.parse(localStorage.getItem(UTS_BANK_KEY)||'[]');utsBank=Array.isArray(b)?b.filter(utsValid):[]}catch(e){utsBank=[]}
+ try{utsSession=JSON.parse(localStorage.getItem(UTS_SESSION_KEY)||'null')}catch(e){utsSession=null}
+ if(utsSession&&(!Array.isArray(utsSession.questions)||!Array.isArray(utsSession.answers)))utsSession=null;
+}
+function utsSaveBank(){try{localStorage.setItem(UTS_BANK_KEY,JSON.stringify(utsBank));return true}catch(e){return false}}
+function utsSave(){try{localStorage.setItem(UTS_SESSION_KEY,JSON.stringify(utsSession));$('utsAutosave').textContent='Tersimpan otomatis · '+new Date().toLocaleTimeString('id-ID');return true}catch(e){$('utsAutosave').textContent='Penyimpanan gagal. Periksa ruang penyimpanan browser.';return false}}
+function utsPool(){return utsDefaults.map(function(q){return Object.assign({type:'pg',level:'Mudah'},q)}).concat(utsBank.map(function(q){return Object.assign({type:'pg',level:'Sedang'},q)}),utsCodingDefaults)}
+function utsTime(ms){var s=Math.max(0,Math.ceil(ms/1000));return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function utsRender(){
+ if(!utsSession)return;
+ var q=utsSession.questions[utsIndex];if(!q)return;
+ $('utsExamTitle').textContent=utsSession.title;
+ $('utsProgress').textContent='Soal '+(utsIndex+1)+' dari '+utsSession.questions.length+' · '+utsSession.answers.filter(function(x){return x!==null&&x!==''}).length+' dijawab';
+ var html='<div class="row" style="gap:8px;flex-wrap:wrap"><span class="tag">'+(q.type==='coding'?'CODING':'PILIHAN GANDA')+'</span><span class="tag">'+utsSafe(q.level||'Sedang')+'</span></div><h3>'+(utsIndex+1)+'. '+utsSafe(q.q)+'</h3>';
+ if(q.type==='coding'){
+  html+='<label for="utsCodeAnswer">Tulis pseudocode / jawabanmu</label><textarea id="utsCodeAnswer" rows="12" style="width:100%;font-family:monospace" placeholder="PROGRAM ...&#10;KAMUS&#10;...&#10;ALGORITMA&#10;...&#10;ENDPROGRAM">'+utsSafe(utsSession.answers[utsIndex]||'')+'</textarea>';
+  html+='<div class="hint" style="margin-top:10px"><b>Aspek yang akan diperiksa:</b><ul>'+q.rubric.map(function(x){return '<li>'+utsSafe(x)+'</li>'}).join('')+'</ul><p>Jawaban coding disimpan otomatis dan perlu diperiksa berdasarkan rubrik.</p></div>';
+ }else{
+  html+=q.o.map(function(v,i){return '<label class="chip" style="display:flex;border-radius:10px;margin:8px 0"><input type="radio" name="utsAnswer" value="'+i+'" '+(utsSession.answers[utsIndex]===i?'checked':'')+'> <b>'+String.fromCharCode(65+i)+'.</b> '+utsSafe(v)+'</label>'}).join('');
+ }
+ $('utsQuestion').innerHTML=html;
+ if(q.type==='coding'){
+  $('utsCodeAnswer').oninput=function(){utsSession.answers[utsIndex]=this.value;utsSave();utsRenderNumbers();};
+ }else{
+  [].forEach.call($('utsQuestion').querySelectorAll('input'),function(inp){inp.onchange=function(){utsSession.answers[utsIndex]=+inp.value;utsSave();utsRenderNumbers();utsRender()}});
+ }
+ $('utsPrev').disabled=utsIndex===0;$('utsNext').disabled=utsIndex===utsSession.questions.length-1;
+ $('utsBar').style.width=(100*utsSession.answers.filter(function(x){return x!==null&&x!==''}).length/utsSession.questions.length)+'%';
+ utsRenderNumbers();
+}
+function utsSafe(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function utsRenderNumbers(){
+ if(!utsSession)return;
+ $('utsNumbers').innerHTML=utsSession.questions.map(function(q,i){return '<button type="button" data-uts-n="'+i+'" class="'+(i===utsIndex?'main':'')+'" style="min-width:38px">'+(i+1)+(utsSession.answers[i]===null||utsSession.answers[i]===''?'':' ✓')+'</button>'}).join('');
+ [].forEach.call($('utsNumbers').querySelectorAll('button'),function(b){b.onclick=function(){utsIndex=+b.dataset.utsN;utsSession.index=utsIndex;utsSave();utsRender()}});
+}
+function utsActivity(){
+ if(!utsSession||utsSession.done)return;
+ utsSession.warnings=(utsSession.warnings||0)+1;
+ utsSession.events=utsSession.events||[];
+ utsSession.events.push({at:new Date().toISOString(),type:'Tab/halaman tidak aktif'});
+ if(utsSession.events.length>30)utsSession.events.shift();
+ utsSave();
+ $('utsWarnings').textContent='Aktivitas tercatat: '+utsSession.warnings+' kali.';
+ var mode=utsSession.validation;
+ if(mode!=='log'&&utsSession.warnings<=3)alert('Perhatian: aktivitas berpindah tab/halaman tercatat ('+utsSession.warnings+'/3).');
+ if(mode==='submit'&&utsSession.warnings>=3)utsFinish(true);
+}
+function utsClockStart(){
+ if(utsTimer)clearInterval(utsTimer);
+ function tick(){if(!utsSession||utsSession.done)return;
+  if(utsSession.deadline){var left=utsSession.deadline-Date.now();$('utsClock').textContent=utsTime(left);
+   if(left<=0){clearInterval(utsTimer);utsFinish(true)}}
+  else $('utsClock').textContent='Tanpa timer';
+ }
+ tick();utsTimer=setInterval(tick,500);
+}
+function utsBegin(resume){
+ if(!resume){
+  var pool=utsPool(),count=+$('utsCount').value,kind=$('utsType').value,level=$('utsLevel').value;
+  pool=pool.filter(function(q){return (kind==='mixed'||(kind==='pg'&&q.type!=='coding')||(kind==='coding'&&q.type==='coding'))&&(level==='all'||q.level===level)});
+  if(!pool.length){$('utsSetupMsg').textContent='Tidak ada soal yang cocok dengan bentuk ujian dan level yang dipilih.';return}
+  if(!confirm('Mulai ujian sekarang? Pastikan pengaturan sudah benar.'))return;
+  if($('utsShuffle').checked){pool=pool.slice();for(var i=pool.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1)),t=pool[i];pool[i]=pool[j];pool[j]=t}}
+  var mins=+$('utsDuration').value;
+  utsSession={title:$('utsTitle').value.trim()||'Simulasi UTS',questions:pool.slice(0,Math.min(count,pool.length)),answers:[],index:0,deadline:mins?Date.now()+mins*60000:null,validation:$('utsValidation').value,warnings:0,events:[],done:false,startedAt:new Date().toISOString()};
+  utsSession.answers=utsSession.questions.map(function(){return null});utsIndex=0;utsSave();
+ }
+ $('utsSetup').hidden=true;$('utsExam').hidden=false;$('utsResult').hidden=true;
+ utsIndex=utsSession.index||0;$('utsWarnings').textContent='Aktivitas tercatat: '+(utsSession.warnings||0)+' kali.';
+ utsRender();utsClockStart();
+}
+function utsFinish(auto){
+ if(!utsSession||utsSession.done)return;
+ var unanswered=utsSession.answers.filter(function(x){return x===null}).length;
+ if(!auto&&!confirm('Kumpulkan ujian sekarang? '+unanswered+' soal belum dijawab.'))return;
+ utsSession.done=true;utsSession.finishedAt=new Date().toISOString();utsSession.autoSubmitted=!!auto;
+ if(utsTimer)clearInterval(utsTimer);
+ try{localStorage.removeItem(UTS_SESSION_KEY)}catch(e){}
+ var correct=0,pgTotal=0,codingTotal=0;
+ utsSession.questions.forEach(function(q,i){if(q.type==='coding')codingTotal++;else{pgTotal++;if(utsSession.answers[i]===q.a)correct++}});
+ var pct=pgTotal?Math.round(correct/pgTotal*100):null;
+ $('utsExam').hidden=true;$('utsSetup').hidden=true;$('utsResult').hidden=false;
+ $('utsResult').innerHTML='<h3>Hasil ujian</h3><p><b>'+utsSafe(utsSession.title)+'</b></p><p style="font-size:1.35rem;font-weight:800">'+(pgTotal?correct+' / '+pgTotal+' PG benar · '+pct+'%':'Tidak ada soal PG')+'</p><p class="hint">'+(codingTotal?codingTotal+' jawaban coding perlu diperiksa manual. ':'')+(auto?'Ujian dikumpulkan otomatis.':'Ujian berhasil dikumpulkan.')+' · Aktivitas tercatat: '+(utsSession.warnings||0)+'</p>'+utsSession.questions.map(function(q,i){var a=utsSession.answers[i];if(q.type==='coding')return '<div class="sc" style="margin:10px 0"><b>'+(i+1)+'. [CODING · '+utsSafe(q.level||'')+'] '+utsSafe(q.q)+'</b><p class="hint">'+(a?'Jawaban tersimpan — perlu diperiksa dengan rubrik.':'Belum dijawab')+'</p><pre style="white-space:pre-wrap;overflow-wrap:anywhere">'+utsSafe(a||'(kosong)')+'</pre><p><b>Rubrik pemeriksaan:</b></p><ul>'+q.rubric.map(function(x){return '<li>'+utsSafe(x)+'</li>'}).join('')+'</ul><p class="hint">'+utsSafe(q.e||'')+'</p></div>';var ok=a===q.a;return '<div class="sc" style="margin:10px 0"><b>'+(i+1)+'. [PG · '+utsSafe(q.level||'')+'] '+utsSafe(q.q)+'</b><p class="'+(ok?'ok':'bad')+'">'+(a===null?'Belum dijawab':(ok?'Benar':'Jawabanmu: '+String.fromCharCode(65+a)))+' · Kunci: '+String.fromCharCode(65+q.a)+'</p><p class="hint">'+utsSafe(q.e||'')+'</p></div>'}).join('')+'<button class="main" id="utsAgain" type="button">Kembali ke persiapan</button>';
+ $('utsAgain').onclick=function(){utsSession=null;$('utsResult').hidden=true;$('utsSetup').hidden=false;$('utsSetupMsg').textContent='Sesi sebelumnya sudah selesai.';};
+ try{var hist=JSON.parse(localStorage.getItem('pseudocode_uts_history_v1')||'[]');hist.unshift({title:utsSession.title,score:correct,total:utsSession.questions.length,date:utsSession.finishedAt});localStorage.setItem('pseudocode_uts_history_v1',JSON.stringify(hist.slice(0,20)))}catch(e){}
+}
+function utsRefreshBank(){
+ $('uqList').textContent=utsBank.length+' soal buatanmu tersimpan.';
+}
+$('utsStart').addEventListener('click',function(){
+ try { $('utsSetupMsg').textContent=''; utsBegin(false); }
+ catch(err) { console.error('Mode UTS:',err); $('utsSetupMsg').textContent='Mode UTS mengalami kendala: '+(err&&err.message?err.message:'kesalahan tidak diketahui')+'. Coba muat ulang halaman.'; }
+});
+$('utsResume').addEventListener('click',function(){
+ try { if(utsSession&&!utsSession.done)utsBegin(true); }
+ catch(err) { console.error('Lanjutkan UTS:',err); $('utsSetupMsg').textContent='Sesi belum dapat dilanjutkan: '+(err.message||err); }
+});
+$('utsClear').onclick=function(){if(!confirm('Hapus sesi ujian tersimpan?'))return;utsSession=null;try{localStorage.removeItem(UTS_SESSION_KEY)}catch(e){}$('utsResume').hidden=true;$('utsSetupMsg').textContent='Sesi tersimpan dihapus.'};
+$('utsPrev').onclick=function(){if(utsIndex>0){utsIndex--;utsSession.index=utsIndex;utsSave();utsRender()}};
+$('utsNext').onclick=function(){if(utsIndex<utsSession.questions.length-1){utsIndex++;utsSession.index=utsIndex;utsSave();utsRender()}};
+$('utsSubmit').onclick=function(){utsFinish(false)};
+$('uqSave').onclick=function(){
+ var q={type:'pg',level:'Sedang',q:$('uqText').value.trim(),o:[$('uqA').value.trim(),$('uqB').value.trim(),$('uqC').value.trim(),$('uqD').value.trim()],a:+$('uqKey').value,e:$('uqExplain').value.trim()};
+ if(!utsValid(q)){$('uqMsg').textContent='Isi pertanyaan dan keempat pilihan jawaban terlebih dahulu.';return}
+ utsBank.push(q);if(!utsSaveBank()){utsBank.pop();$('uqMsg').textContent='Gagal menyimpan. Penyimpanan browser mungkin penuh.';return}
+ ['uqText','uqA','uqB','uqC','uqD','uqExplain'].forEach(function(id){$(id).value=''});$('uqMsg').textContent='Soal berhasil ditambahkan ke bank.';utsRefreshBank();
+};
+$('uqExport').onclick=function(){var blob=new Blob([JSON.stringify(utsBank,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='bank-soal-pseudocode.json';a.click();setTimeout(function(){URL.revokeObjectURL(url)},1000)};
+$('uqImport').onclick=function(){$('uqFile').click()};
+$('uqFile').onchange=function(){var f=this.files&&this.files[0];if(!f)return;var reader=new FileReader();reader.onload=function(){try{var data=JSON.parse(reader.result);if(!Array.isArray(data)||!data.every(utsValid))throw Error();utsBank=utsBank.concat(data);if(!utsSaveBank())throw Error();utsRefreshBank();$('uqMsg').textContent=data.length+' soal berhasil diimpor.'}catch(e){$('uqMsg').textContent='File tidak valid. Gunakan JSON hasil ekspor bank soal.'}};reader.readAsText(f);this.value=''};
+utsLoad();utsRefreshBank();
+if(utsSession&&!utsSession.done){$('utsResume').hidden=false;$('utsSetupMsg').textContent='Ada sesi ujian yang belum selesai. Kamu bisa melanjutkannya.'}
+document.addEventListener('visibilitychange',function(){if(document.hidden)utsActivity()});
+window.addEventListener('pagehide',function(){if(utsSession&&!utsSession.done)utsSave()});
+
+/* ===== UTS: SOAL CODING & TRACING OTOMATIS ===== */
+function fmt(x){return typeof x==='number'&&!Number.isInteger(x)?String(+x.toFixed(3)):String(x)}
+var KG='UTS Ganjil 2024/2025',KH='UTS Ganjil 2025/2026';
+var UTSX=[
+{level:'Mudah',judul:'Nilai Akhir',src:KG,q:'Nilai Akhir (NA) mata kuliah Algoritma dan Pemrograman 1 dihitung dengan NA = 1/10 x tugas + 2/10 x kuis + 7 x ujian/14 + 0.2 x praktikum.\n\nMasukan: empat bilangan bulat: tugas, kuis, ujian, dan praktikum.\nKeluaran: teks Nilai Akhir adalah, diikuti NA.\nCatatan: soal ini tidak perlu perulangan.',
+ kunci:K('program Alpro','kamus','  tugas, kuis, ujian, praktikum : integer','  na : real','algoritma','  input(tugas, kuis, ujian, praktikum)','  na = tugas / 10 + 2 * kuis / 10 + 7 * ujian / 14 + 0.2 * praktikum','  output("Nilai Akhir adalah", na)','endprogram'),
+ contoh:['10 10 10 10','95 90 90 88','10 10 100 0'],uji:['100 100 100 100','0 0 0 0','80 70 60 90']},
+{level:'Sedang',judul:'Pohon Mangga',src:KG,q:'Pak Mul mengukur tinggi pohon mangga dari panjang bayangannya dibandingkan bayangan sepotong tongkat 1 meter. Tangga menjangkau pohon jika panjang tangga tidak kurang dari tinggi pohon.\n\nMasukan: tiga bilangan riil: bayangan tongkat (A), bayangan pohon (B), dan panjang tangga.\nKeluaran: perkiraan tinggi pohon (riil), lalu boolean apakah tangga menjangkau pohon.\nCatatan: soal ini tidak perlu perulangan.',
+ kunci:K('program PohonMangga','kamus','  a, b, tangga, tinggi : real','  jangkau : boolean','algoritma','  input(a, b, tangga)','  tinggi = b / a','  jangkau = tangga >= tinggi','  output(tinggi, jangkau)','endprogram'),
+ contoh:['0.8 3.5 5.5','1.5 7.5 4.5','1.4 7.2 6'],uji:['1 5 5','1 5 4.9','2.5 10 4']},
+{level:'Sulit',judul:'Armstrong',src:KG,q:'Bilangan Armstrong adalah bilangan yang jumlah setiap digitnya, masing-masing dipangkatkan banyak digit bilangan itu, sama dengan bilangan itu sendiri. Contoh: 153 menghasilkan 1^3 + 5^3 + 3^3 = 153.\n\nMasukan: dua bilangan positif x dan y, y adalah banyak digit x.\nKeluaran: jumlah setiap digit x yang dipangkatkan y (bilangan bulat), lalu boolean apakah x adalah bilangan Armstrong.\nCatatan: gunakan perulangan dan operator ^ untuk pangkat.',
+ kunci:K('program Armstrong','kamus','  x, y, t, i, d, jumlah : integer','  status : boolean','algoritma','  input(x, y)','  t = x','  jumlah = 0','  for i = 1 to y do','    d = t mod 10','    jumlah = jumlah + d ^ y','    t = t div 10','  endfor','  status = jumlah == x','  output(jumlah, status)','endprogram'),
+ contoh:['153 3','1000 4','548834 6'],uji:['9474 4','370 3','100 3']},
+{level:'Sedang',judul:'Enkripsi Kode Rahasia',src:KH,q:'Kode rahasia berupa bilangan 4 digit m diubah menjadi nilai sandi k = (d1 + d2) x (d3 + d4) + (p - q). di adalah digit ke-i dari kiri, p adalah jumlah digit pertama dan terakhir, q adalah digit kedua dikurangi digit ketiga.\n\nMasukan: bilangan bulat m (1000 <= m <= 9999).\nKeluaran: nilai sandi k.',
+ kunci:K('program Enkripsi','kamus','  m, d1, d2, d3, d4, p, q, k : integer','algoritma','  input(m)','  d1 = m div 1000','  d2 = m div 100 mod 10','  d3 = m div 10 mod 10','  d4 = m mod 10','  p = d1 + d4','  q = d2 - d3','  k = (d1 + d2) * (d3 + d4) + (p - q)','  output(k)','endprogram'),
+ contoh:['1234','4321','9199','1910'],uji:['1000','9999','5050']},
+{level:'Sedang',judul:'Potongan Cake',src:KH,q:'Sebuah cake berbentuk tabung dipotong menjadi N bagian sama besar, tiap potongan berbentuk juring dengan ujung runcing di pusat. Hitung luas permukaan satu potongan (satuan cm, pi = 3.14).\nPetunjuk: potongan punya 2 sisi lurus (r x t), alas dan atas masing-masing luas lingkaran dibagi N, dan 1 sisi lengkung (keliling / N x t).\n\nMasukan: N (banyak potongan), diameter d, dan tebal t.\nKeluaran: luas permukaan satu potongan, diikuti teks cm2.',
+ kunci:K('program Cake','kamus','  n : integer','  d, t, r, keliling, luas, tepi, alas, luar, potongan : real','algoritma','  input(n, d, t)','  r = d / 2','  keliling = 2 * 3.14 * r','  luas = 3.14 * r * r','  tepi = r * t','  alas = luas / n','  luar = keliling / n * t','  potongan = 2 * tepi + 2 * alas + luar','  output(potongan, "cm2")','endprogram'),
+ contoh:['2 20 10','8 20 15','10 30 10'],uji:['4 10 5','6 40 8','1 30 10']},
+{level:'Sulit',judul:'Posyandu',src:KH,q:'Posyandu menghitung BMI dan Indikator Kesehatan (I) bayi: bmi = 10 x w / h^2 dan I = (bmi + c/10) / 2, dengan w berat badan, h tinggi badan, dan c lingkar kepala.\n\nMasukan: N (banyak bayi), lalu N baris berisi w, h, c.\nKeluaran: N baris berisi bmi dan I tiap bayi, lalu satu baris rata-rata bmi dan rata-rata I.',
+ kunci:K('program Posyandu','kamus','  n, j : integer','  w, h, c, bmi, ind, tb, ti : real','algoritma','  input(n)','  tb = 0','  ti = 0','  for j = 1 to n do','    input(w, h, c)','    bmi = 10 * w / (h * h)','    ind = (bmi + c / 10) / 2','    tb = tb + bmi','    ti = ti + ind','    output(bmi, ind)','  endfor','  output(tb / n, ti / n)','endprogram'),
+ contoh:['10\n3200 50 35\n2500 47 33\n4500 55 37\n7530 66 43\n9430 75 46\n11750 86 48\n11930 89 51\n14060 95 52\n16330 102 55\n18370 109 56','2\n3200 50 35\n2500 47 33'],uji:['1\n2000 40 30','3\n3000 50 35\n4000 60 38\n5000 70 40']},
+{level:'Sedang',judul:'Tracing Soal 4',src:KG,trace:true,q:'Apa yang dihasilkan algoritma berikut jika diberi nilai = 5742 dan x = 4? Tulis setiap keluaran pada barisnya sendiri.',inp:'5742 4',
+ kode:K('program Soal4','kamus','    nilai, x : integer','    j, z, f, m, n : integer','algoritma','    z = 0','    input(nilai, x)','    f = 10 ^ (x-1)','    for j = 1 to x do','        m = nilai div f','        nilai = nilai mod f','        f = f div 10','        n = m ^ j','        output(n)','        z = z + n','    endfor','    output(z)','endprogram')},
+{level:'Sulit',judul:'Tracing GenZ',src:KH,trace:true,q:'Apa yang dihasilkan program berikut jika dijalankan dengan masukan: 10, 1, 2, 3, 693, 482, 586, 525, 721, 406, 543? Tulis setiap baris keluaran pada barisnya sendiri.',inp:'10\n1\n2\n3\n693\n482\n586\n525\n721\n406\n543',
+ kode:K('program GenZ','dictionary','    N, v : integer','    a, b, c : integer','    i : integer','algorithm','    input(N)','    a = 0','    b = 0','    c = 0','    for i=1 to N do','        input (v)','        a = a + (3 - v mod 3) div 3','        b = b + (4 - v mod 3) div 3','        c = c + (5 - v mod 3) div 3','        output(a, b, c)','    endfor','    output(a, b-a, c-b)','endprogram')}
+];
+UTSX.forEach(function(q){q.kunci=q.kunci||q.kode.replace(/^dictionary$/m,'kamus').replace(/^algorithm$/m,'algoritma')});
+function utsFromTpl(t){return{type:'coding',level:LV[t.lv],judul:t.judul,src:'Latihan Acak \u00b7 '+t.bab,pts:25,q:t.cerita+'\n\nMasukan: '+t.masukan+'\nKeluaran: '+t.keluaran,kunci:t.kunci,contoh:t.kasus(),uji:t.kasus()}}
+utsPool=function(){return utsDefaults.map(function(q){return Object.assign({type:'pg',level:'Mudah'},q)}).concat(utsBank.map(function(q){return Object.assign({type:'pg',level:'Sedang'},q)}),UTSX.map(function(q){return Object.assign({type:'coding',pts:25},q)}),TPL.map(utsFromTpl))};
+$('utsCount').innerHTML=[5,10,15,20,30].map(function(n){return '<option value="'+n+'"'+(n===10?' selected':'')+'>'+n+' soal</option>'}).join('');
+utsRender=function(){if(!utsSession)return;var q=utsSession.questions[utsIndex];if(!q)return;
+ $('utsExamTitle').textContent=utsSession.title;
+ var jml=utsSession.answers.filter(function(x){return x!==null&&x!==''}).length;
+ $('utsProgress').textContent='Soal '+(utsIndex+1)+' dari '+utsSession.questions.length+' \u00b7 '+jml+' dijawab';
+ var h='<div class="row" style="gap:8px;flex-wrap:wrap"><span class="tag">'+(q.type==='coding'?(q.trace?'TRACING':'CODING'):'PILIHAN GANDA')+'</span><span class="tag">'+utsSafe(q.level||'Sedang')+'</span>'+(q.src?'<span class="tag">'+utsSafe(q.src)+'</span>':'')+'</div>';
+ if(q.type==='coding'){
+  h+='<h3>'+(utsIndex+1)+'. '+utsSafe(q.judul||'Soal')+'</h3><p style="white-space:pre-wrap">'+utsSafe(q.q)+'</p>';
+  if(q.trace){h+='<pre>'+utsSafe(q.kode.split('\n').map(function(l,i){return (i<9?' ':'')+(i+1)+'  '+l}).join('\n'))+'</pre><label for="utsCodeAnswer">Keluaran program</label>'}
+  else{if(!q.co){q.co=q.contoh.map(function(m){return jalankanKunci(q.kunci,m)});utsSave()}
+   h+='<h4>Contoh masukan dan keluaran</h4><div class="sc-wrap"><table class="ct"><tr><th>No</th><th>Masukan</th><th>Keluaran</th></tr>'+q.contoh.map(function(m,i){return '<tr><td>'+(i+1)+'</td><td>'+esc(m)+'</td><td>'+esc(q.co[i])+'</td></tr>'}).join('')+'</table></div><label for="utsCodeAnswer">Jawabanmu (pseudocode)</label>'}
+  h+='<textarea id="utsCodeAnswer" rows="'+(q.trace?6:14)+'" spellcheck="false" style="width:100%;font-family:monospace;white-space:pre">'+utsSafe(utsSession.answers[utsIndex]||'')+'</textarea>';
+  if(!q.trace)h+='<div class="row"><button id="utsCek" type="button">Cek contoh</button></div><div id="utsCekOut"></div>';
+ }else{h+='<h3>'+(utsIndex+1)+'. '+utsSafe(q.q)+'</h3>'+q.o.map(function(v,i){return '<label class="chip" style="display:flex;border-radius:10px;margin:8px 0"><input type="radio" name="utsAnswer" value="'+i+'" '+(utsSession.answers[utsIndex]===i?'checked':'')+'> <b>'+String.fromCharCode(65+i)+'.</b> '+utsSafe(v)+'</label>'}).join('')}
+ $('utsQuestion').innerHTML=h;
+ if(q.type==='coding'){$('utsCodeAnswer').oninput=function(){utsSession.answers[utsIndex]=this.value;utsSave();utsRenderNumbers()};
+  if($('utsCek'))$('utsCek').onclick=function(){var code=utsSession.answers[utsIndex]||'',rows='',ok=0;
+   q.contoh.forEach(function(m,i){var got=jalankanKunci(code,m),y=sama(got,q.co[i]);if(y)ok++;rows+='<tr><td>'+(i+1)+'</td><td class="'+(y?'ok':'bad')+'">'+(y?'\u2713 Benar':'\u2715 Salah')+'</td><td>'+(y?'':esc(got))+'</td></tr>'});
+   $('utsCekOut').innerHTML='<p><b>'+ok+' dari '+q.contoh.length+' contoh benar</b></p><div class="sc-wrap"><table class="ct">'+rows+'</table></div>'}}
+ else{[].forEach.call($('utsQuestion').querySelectorAll('input'),function(inp){inp.onchange=function(){utsSession.answers[utsIndex]=+inp.value;utsSave();utsRenderNumbers();utsRender()}})}
+ $('utsPrev').disabled=utsIndex===0;$('utsNext').disabled=utsIndex===utsSession.questions.length-1;
+ $('utsBar').style.width=(100*jml/utsSession.questions.length)+'%';utsRenderNumbers()};
+utsFinish=function(auto){if(!utsSession||utsSession.done)return;
+ var kosong=utsSession.answers.filter(function(x){return x===null||x===''}).length;
+ if(!auto&&!confirm('Kumpulkan ujian sekarang? '+kosong+' soal belum dijawab.'))return;
+ utsSession.done=true;utsSession.finishedAt=new Date().toISOString();utsSession.autoSubmitted=!!auto;
+ if(utsTimer)clearInterval(utsTimer);try{localStorage.removeItem(UTS_SESSION_KEY)}catch(e){}
+ var tot=0,rows='';
+ utsSession.questions.forEach(function(q,i){var a=utsSession.answers[i],sc=0,info='';
+  if(q.type==='coding'){
+   if(!a)info='Belum dijawab';
+   else if(q.trace){sc=sama(a,jalankanKunci(q.kunci,q.inp))?1:0;info=sc?'Keluaran benar':'Keluaran belum tepat'}
+   else{var all=q.contoh.concat(q.uji||[]),ok=0;all.forEach(function(m){if(sama(jalankanKunci(a,m),jalankanKunci(q.kunci,m)))ok++});sc=ok/all.length;info=ok+' dari '+all.length+' uji lolos'}}
+  else{sc=a===q.a?1:0;info=a===null?'Belum dijawab':(sc?'Benar':'Salah. Kunci: '+String.fromCharCode(65+q.a)+(q.e?' \u00b7 '+q.e:''))}
+  tot+=sc;rows+='<div class="sc" style="margin:8px 0"><b>'+(i+1)+'. '+utsSafe(q.judul||q.q)+'</b> <span class="tag">'+Math.round(sc*100)+'%</span><p class="hint">'+utsSafe(info)+'</p></div>'});
+ var nilai=Math.round(tot/utsSession.questions.length*100);
+ $('utsExam').hidden=true;$('utsSetup').hidden=true;$('utsResult').hidden=false;
+ $('utsResult').innerHTML='<h3>Hasil ujian</h3><p><b>'+utsSafe(utsSession.title)+'</b></p><p style="font-size:1.6rem;font-weight:800">Nilai '+nilai+' / 100</p><p class="hint">'+(auto?'Ujian dikumpulkan otomatis. ':'')+'Aktivitas tercatat: '+(utsSession.warnings||0)+'</p>'+rows+'<div class="row"><button class="main" id="utsAgain" type="button">Ujian baru</button></div>';
+ $('utsAgain').onclick=function(){utsSession=null;$('utsResult').hidden=true;$('utsSetup').hidden=false;$('utsResume').hidden=true}};
+setList(bukaList,true);show('v-home');
+$('cek').onclick=refresh;
+muat();pilih(aktif);
+})();
+</script>
+</body>
+</html>
